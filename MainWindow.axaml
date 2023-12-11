@@ -5,5 +5,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MAMEIronXP.MainWindow"
         Title="MAMEIronXP">
-    Welcome to Avalonia!
+   
+    <Window.Background>
+      <ImageBrush Source="avares://MAMEIronXP/Assets/MAMEIronXPCabinet.png" />
+    </Window.Background>
 </Window>
