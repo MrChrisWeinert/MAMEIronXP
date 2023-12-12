@@ -18,6 +18,7 @@ namespace MAMEIronXP
         private string _gamesJson;
         private string _logFile;
         private string _catver;
+        private string _romsDirectory;
         //TODO
         //private Dictionary<string, System.Windows.Media.ImageSource> _snapshots;
 
@@ -41,6 +42,7 @@ namespace MAMEIronXP
             _logFile = ConfigurationManager.AppSettings["LogFile"];
             _catver = ConfigurationManager.AppSettings["catverFile"];
             _snapDirectory = ConfigurationManager.AppSettings["SnapDirectory"];
+            _romsDirectory = ConfigurationManager.AppSettings["RomsDirectory"];
 
             //TODO
             //_snapshots = new Dictionary<string, System.Windows.Media.ImageSource>();
