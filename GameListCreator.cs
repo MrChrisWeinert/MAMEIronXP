@@ -13,7 +13,7 @@ namespace MAMEIronXP
 {
     public class GameListCreator
     {
-        private string _rootDirectory;
+        private string _MAMEDirectory;
         private string _mameExe;
         private string _listFull;
         private string _snapsDir;
@@ -24,9 +24,9 @@ namespace MAMEIronXP
         private Dictionary<string, float> _versions;
         private List<string> _killList;
 
-        public void GenerateGameList(string mameExe, string gamesJson, string snapDir)
+        public void GenerateGameList(string MAMEDirectory, string mameExe, string gamesJson, string snapDir, string catver)
         {
-            _rootDirectory = ConfigurationManager.AppSettings["rootDirectory"];
+            _MAMEDirectory = MAMEDirectory;
             _mameExe = mameExe;
             _gamesJson = gamesJson;
             _snapsDir = snapDir;
@@ -44,24 +44,21 @@ namespace MAMEIronXP
 
             if (!File.Exists(_gamesJson))
             {
-                GenerateGamesJSON();
+                GenerateGamesJSON(catver);
             }
 
             return;
         }
-        private void GenerateGamesJSON()
+        private void GenerateGamesJSON(string catver)
         {
-            _listFull = Path.Combine(_rootDirectory, "list.xml");
+            _listFull = Path.Combine(_MAMEDirectory, "list.xml");
             if (!File.Exists(_listFull))
             {
                 GenerateGamesXML();
             }
 
-            //I included an old version of Catver from: http://www.progettosnaps.net/catver/ but there are newer versions available.
-            
-            //Case-sensitive
-            _catver = Path.Combine(_rootDirectory, "Catver.ini");
-            _gamesJson = Path.Combine(_rootDirectory, "games.json");
+            _catver = catver;
+            _gamesJson = Path.Combine(_MAMEDirectory, "games.json");
             _categories = new Dictionary<string, string>();
             _versions = new Dictionary<string, float>();
             LoadCategoriesAndVersions();
@@ -74,11 +71,11 @@ namespace MAMEIronXP
             string st = _mameExe;
             Process process = new Process();
             process.StartInfo.FileName = st;
-            process.StartInfo.WorkingDirectory = _rootDirectory;
+            process.StartInfo.WorkingDirectory = _MAMEDirectory;
             process.StartInfo.Arguments = " -listxml";
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
-            //Perf note: It will take MAME a few minutes to generate the list.xml file. It's roughly 222MB in size (version .211).
+            //Perf note: It will take MAME a few minutes on low-end hardware to generate the list.xml file. It's roughly 263MB in size (version .244).
             process.Start();
 
             using (StreamReader sr = process.StandardOutput)
@@ -97,64 +94,58 @@ namespace MAMEIronXP
 
         private void LoadCategoriesAndVersions()
         {
-            bool isCategory = true;
-            //enum Linetype {Category, Version};
             using (StreamReader sr = new StreamReader(_catver))
             {
                 string line = sr.ReadLine();
-                while (line != null)
+                while (line != null) // && !string.IsNullOrEmpty(line)
                 {
-                    if (!string.IsNullOrEmpty(line))
+                    //if the line doesn't contain an equal sign, we don't care about it. Move along...
+                    if (!line.Contains("="))
                     {
-                        if (line == "[Category]")
-                        {
-                            isCategory = true;
-                            line = sr.ReadLine();
-                        }
-                        else if (line == "[VerAdded]")
-                        {
-                            isCategory = false;
-                            line = sr.ReadLine();
-                        }
-                        if (isCategory)
-                        {
-                            string name = line.Substring(0, line.IndexOf("="));
-                            int start = line.IndexOf("=") + 1;
-                            int end = line.Length - start;
-                            string category = line.Substring(start, end);
-                            _categories.Add(name, category);
-                        }
-                        else
-                        {
-                            string name = line.Substring(0, line.IndexOf("="));
-                            int start = line.IndexOf("=") + 1;
-                            int end = line.Length - start;
-                            string ver = line.Substring(start, end);
-                            if (ver.Contains("b") || ver.Contains("u") || ver.Contains("rc") || ver.Contains("a"))
-                            {
-                                int letterPos=-1;
-                                if (ver.Contains("b"))
-                                {
-                                    letterPos = ver.IndexOf("b");
-                                }
-                                else if (ver.Contains("u"))
-                                {
-                                    letterPos = ver.IndexOf("u");
-                                }
-                                else if (ver.Contains("rc"))
-                                {
-                                    letterPos = ver.IndexOf("rc");
-                                }
-                                else if (ver.Contains("a"))
-                                {
-                                    letterPos = ver.IndexOf("a");
-                                }
-                                ver = ver.Substring(0, letterPos);
-                            }
-                            float version = float.Parse(ver);
-                            _versions.Add(name, version);
-                        }
+                        line = sr.ReadLine();
+                        continue;
                     }
+
+                    // if there's a "/" we know it's a category, like this:
+                    //    mspacman=Maze / Collect
+                    if (line.Contains("/"))
+                    {
+                        var x = line.Split("=");
+                        string name = x[0];
+                        string category = x[1];
+                        _categories.Add(name, category);
+                    }
+                    // else it just has an equal sign so we know it's a game like this:
+                    //   mspacman=0.37b16
+                    else
+                    {
+                        var x = line.Split("=");
+                        string name = x[0];
+                        string ver = x[1];
+                        if (ver.Contains("b") || ver.Contains("u") || ver.Contains("rc") || ver.Contains("a"))
+                        {
+                            int letterPos=-1;
+                            if (ver.Contains("b"))
+                            {
+                                letterPos = ver.IndexOf("b");
+                            }
+                            else if (ver.Contains("u"))
+                            {
+                                letterPos = ver.IndexOf("u");
+                            }
+                            else if (ver.Contains("rc"))
+                            {
+                                letterPos = ver.IndexOf("rc");
+                            }
+                            else if (ver.Contains("a"))
+                            {
+                                letterPos = ver.IndexOf("a");
+                            }
+                            ver = ver.Substring(0, letterPos);
+                        }
+                        float version = float.Parse(ver);
+                        _versions.Add(name, version);
+                    }                    
                     line = sr.ReadLine();
                 }
             }
@@ -164,7 +155,7 @@ namespace MAMEIronXP
         {
             _games = new List<Game>();
             XmlDocument doc = new XmlDocument();
-            //Perf note: The list.xml file is roughly 222MB (version .211). Loading this into memory uses ~2GB of RAM.
+            //Perf note: The list.xml file is roughly 263B (version .244). Loading this into memory uses ~2GB of RAM.
             doc.Load(_listFull);
             XmlNode root = doc.SelectSingleNode("mame");
             HashSet<string> drivers = new HashSet<string>();
@@ -190,6 +181,8 @@ namespace MAMEIronXP
                 {
                     float version = 0;
                     _versions.TryGetValue(g.Name, out version);
+                    
+                    //Not sure why we had issues with version .212?
                     if (version != .212)
                     {
                         g.Description = node.SelectSingleNode("description").InnerText;
@@ -303,11 +296,15 @@ namespace MAMEIronXP
         }
         static void WriteNewGamesFile(List<Game> _games, string _gamesJson)
         {
-            using (StreamWriter sw = new StreamWriter(_gamesJson, false))
+            //Don't write an empty file
+            if (_games.Count > 0)
             {
-                string json = JsonConvert.SerializeObject(_games);
-                sw.WriteLine(json);
-                sw.Close();
+                using (StreamWriter sw = new StreamWriter(_gamesJson, false))
+                {
+                    string json = JsonConvert.SerializeObject(_games);
+                    sw.WriteLine(json);
+                    sw.Close();
+                }
             }
         }
     }

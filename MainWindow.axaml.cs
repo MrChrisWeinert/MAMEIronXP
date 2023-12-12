@@ -11,12 +11,13 @@ namespace MAMEIronXP
 {
     public partial class MainWindow : Window
     {
-        private string _rootDirectory;
+        private string _MAMEDirectory;
         private string _snapDirectory;
         private string _mameExe;
         private string _mameArgs;
         private string _gamesJson;
         private string _logFile;
+        private string _catver;
         //TODO
         //private Dictionary<string, System.Windows.Media.ImageSource> _snapshots;
 
@@ -34,14 +35,16 @@ namespace MAMEIronXP
         public MainWindow()
         {
             InitializeComponent();
-            _rootDirectory = ConfigurationManager.AppSettings["rootDirectory"];
+            _MAMEDirectory = ConfigurationManager.AppSettings["MAMEDirectory"];
+            _mameExe = Path.Combine(_MAMEDirectory, ConfigurationManager.AppSettings["MAMEExecutable"]);
             _mameArgs = ConfigurationManager.AppSettings["MAME_Args"];
-            _logFile = Path.Combine(_rootDirectory, "log.txt");
-            _mameExe = Path.Combine(_rootDirectory, "MAME64.EXE");
-            _snapDirectory = Path.Combine(_rootDirectory, "snap");
+            _logFile = ConfigurationManager.AppSettings["LogFile"];
+            _catver = ConfigurationManager.AppSettings["catverFile"];
+            _snapDirectory = ConfigurationManager.AppSettings["SnapDirectory"];
+
             //TODO
             //_snapshots = new Dictionary<string, System.Windows.Media.ImageSource>();
-            _gamesJson = Path.Combine(_rootDirectory, "games.json");
+            _gamesJson = Path.Combine(_MAMEDirectory, "games.json");
             _logger = new Logger(_logFile);
 
             //Sanity checks
@@ -51,20 +54,28 @@ namespace MAMEIronXP
                 errorText = $"{_mameExe} does not exist.";
                 //TODO
                 //MessageBox.Show(errorText, "Fatal Error");
-                _logger.LogException(errorText, new Exception("MAME executable not found"));
+                _logger.LogException(errorText, new Exception($"MAME executable ({_mameExe}) not found"));
+                Environment.Exit(1);
+            }
+            else if (!File.Exists(_catver))
+            {
+                errorText = $"{_catver} does not exist.";
+                //TODO
+                //MessageBox.Show(errorText, "Fatal Error");
+                _logger.LogException(errorText, new Exception($"{_catver} not found"));
                 Environment.Exit(1);
             }
             else if (!File.Exists(_gamesJson))
             {
                 GameListCreator glc = new GameListCreator();
-                glc.GenerateGameList(_mameExe, _gamesJson, _snapDirectory);
+                glc.GenerateGameList(_MAMEDirectory, _mameExe, _gamesJson, _snapDirectory, _catver);
             }
             else if (!Directory.Exists(_snapDirectory))
             {
                 errorText = $"{_snapDirectory} does not exist.";
                 //TODO
                 //MessageBox.Show(errorText, "Fatal Error");
-                _logger.LogException(errorText, new Exception("Snap directory not found"));
+                _logger.LogException(errorText, new Exception($"Snap directory ({_snapDirectory}) not found"));
                 Environment.Exit(1);
             }
             LoadGamesFromJSON();
