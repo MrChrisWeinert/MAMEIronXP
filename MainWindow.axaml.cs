@@ -52,16 +52,14 @@ namespace MAMEIronXP
             if (!File.Exists(_mameExe))
             {
                 errorText = $"{_mameExe} does not exist.";
-                //TODO
-                //MessageBox.Show(errorText, "Fatal Error");
+                Console.WriteLine(errorText);
                 _logger.LogException(errorText, new Exception($"MAME executable ({_mameExe}) not found"));
                 Environment.Exit(1);
             }
             else if (!File.Exists(_catver))
             {
                 errorText = $"{_catver} does not exist.";
-                //TODO
-                //MessageBox.Show(errorText, "Fatal Error");
+                Console.WriteLine(errorText);
                 _logger.LogException(errorText, new Exception($"{_catver} not found"));
                 Environment.Exit(1);
             }
@@ -73,8 +71,7 @@ namespace MAMEIronXP
             else if (!Directory.Exists(_snapDirectory))
             {
                 errorText = $"{_snapDirectory} does not exist.";
-                //TODO
-                //MessageBox.Show(errorText, "Fatal Error");
+                Console.WriteLine(errorText);
                 _logger.LogException(errorText, new Exception($"Snap directory ({_snapDirectory}) not found"));
                 Environment.Exit(1);
             }
@@ -82,8 +79,7 @@ namespace MAMEIronXP
             if (_games.Count == 0)
             {
                 errorText = $"_games count is zero.";
-                //TODO
-                //MessageBox.Show(errorText, "Fatal Error");
+                Console.WriteLine(errorText);
                 _logger.LogException(errorText, new Exception("Games did not load"));
                 Environment.Exit(1);
             }
