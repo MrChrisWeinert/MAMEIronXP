@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <!-- For Windows the MAMEDirectory format should be something like this: "C:\MAME" -->
+    <!-- For Linux the MAMEDirectory format should be something like this: "/home/myuser/MAME" -->
+    <add key="MAMEDirectory" value="C:\MAME"/>
+
+    <!-- For Windows the MAMEExecutable format should be something like this: "mame.exe" -->
+    <!-- For Linux the MAMEExecutable format should be something like this: "mame" -->
+    <add key="MAMEExecutable" value="mame.exe"/>
+    
+    <!-- For Windows the LogFile format should be something like this: "C:\Temp\logfile.log" -->
+    <!-- For Linux the LogFile format should be something like this: "/var/log/MAMElogfile.log" -->
+    <add key="LogFile" value="C:\Temp\logfile.log"/>
+
+    <!-- For Windows the catverFile format should be something like this: "C:\MAME\catver.ini" -->
+    <!-- For Linux the catverFile format should be something like this: "/home/myuser/MAME/catver.ini" -->
+    <add key="catverFile" value="C:\MAME\catver.ini"/>
+
+    <!-- For Windows the SnapDirectory format should be something like this: "C:\MAME\snap" -->
+    <!-- For Linux the SnapDirectory format should be something like this: "/home/myuser/MAME/snap" -->
+    <add key="SnapDirectory" value="C:\MAME\snap"/>
+
+    <!-- For Windows the RomsDirectory format should be something like this: "C:\MAME\roms" -->
+    <!-- For Linux the RomsDirectory format should be something like this: "/home/myuser/MAME/roms" -->
+    <add key="RomsDirectory" value="C:\MAME\roms"/>
+
+    <add key="MAME_Args" value="-autosave -skip_gameinfo -video d3d"/>
+    
+  </appSettings>
+</configuration>
