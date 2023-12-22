@@ -12,6 +12,9 @@
     <ImageBrush Source="avares://MAMEIronXP/Assets/MAMEIronXPCabinetV2.png" AlignmentX="Left" AlignmentY="Top"/>
   </Window.Background>
   <StackPanel HorizontalAlignment="Right" Margin="150">
+    <!-- There's an issue with the ListBox where you scroll down the game list and hit the last item...
+    What it *should* do is keep scrolling so you can get to the other games. What it sometimes does is cycle back
+    up to the top of the list. I've narrowd the issue down to the "Height" property on the ListBox. So that's something that'll need to get looked at -->
     <ListBox x:Name="GamesListBox" Width="1100" Height="1100" CornerRadius="25" >
       <ListBox.ItemTemplate>
         <DataTemplate>
