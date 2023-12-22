@@ -6,7 +6,9 @@
         x:Class="MAMEIronXP.MainWindow"
         Title="MAMEIronXP">
    
-    <Window.Background>
-      <ImageBrush Source="avares://MAMEIronXP/Assets/MAMEIronXPCabinet.png" />
-    </Window.Background>
+        WindowState="FullScreen"
+        Cursor="None"
+  <Window.Background>
+    <ImageBrush Source="avares://MAMEIronXP/Assets/MAMEIronXPCabinetV2.png" AlignmentX="Left" AlignmentY="Top"/>
+  </Window.Background>
 </Window>
