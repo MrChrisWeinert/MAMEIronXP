@@ -12,7 +12,7 @@
    </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
-    <None Remove="Assets\MAMEIronXPCabinet.afphoto" />
+    <None Remove="Assets\MAMEIronXPCabinet2.afphoto" />
   </ItemGroup>
   <ItemGroup>
     <!--This helps with theme dll-s trimming.
