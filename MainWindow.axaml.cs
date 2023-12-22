@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using MAMEIronXP.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

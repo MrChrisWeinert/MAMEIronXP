@@ -8,6 +8,7 @@ using System.Xml;
 using System.Configuration;
 using System.Diagnostics;
 using System;
+using MAMEIronXP.Models;
 
 namespace MAMEIronXP
 {
