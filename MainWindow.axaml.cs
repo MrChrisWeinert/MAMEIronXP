@@ -93,20 +93,9 @@ namespace MAMEIronXP
                 Environment.Exit(1);
             }
 
-            //Application.Current.MainWindow.Left = 0;
-            //Application.Current.MainWindow.Top = 0;
-            //HideMouse();
-
-
-            //#region Load games from disk and bind to the ListView
-
-            //lvGames.ItemsSource = GetUpdatedGameList();
-
-            //CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvGames.ItemsSource);
-            //lvGames.Focus();
-            //lvGames.SelectionMode = SelectionMode.Single;
-            //lvGames.SelectedIndex = 0;
-            //#endregion
+            GamesListBox.ItemsSource = _games;
+            GamesListBox.SelectedIndex = 0;
+            GamesListBox.SelectionMode = SelectionMode.Single;
 
         }
         private void LoadGamesFromJSON()

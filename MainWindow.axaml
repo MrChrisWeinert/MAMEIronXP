@@ -11,4 +11,13 @@
   <Window.Background>
     <ImageBrush Source="avares://MAMEIronXP/Assets/MAMEIronXPCabinetV2.png" AlignmentX="Left" AlignmentY="Top"/>
   </Window.Background>
+  <StackPanel HorizontalAlignment="Right" Margin="150">
+    <ListBox x:Name="GamesListBox" Width="1100" Height="1100" CornerRadius="25" >
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <TextBlock Text="{Binding Description}" FontSize="48" FontFamily="Arcade" />
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+  </StackPanel>
 </Window>
