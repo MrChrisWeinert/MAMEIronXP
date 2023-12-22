@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 
 namespace MAMEIronXP
 {
