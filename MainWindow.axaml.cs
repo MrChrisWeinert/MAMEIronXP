@@ -24,7 +24,9 @@ namespace MAMEIronXP
         //private Dictionary<string, System.Windows.Media.ImageSource> _snapshots;
 
 
-        //Note: Why did I use an ObservableCollection here?
+        //Note: We use an ObservableCollection (versus a List) so we can take action when the collection is changed. For example:
+        //   When a game is played; the PlayCount is incremented
+        //   If a user Favorites/Unfavorites a game, refresh the list, etc.
         private ObservableCollection<Game> _games = new ObservableCollection<Game>();
         private Logger _logger;
         private DateTime _startTimeUpPress = new DateTime(0);
