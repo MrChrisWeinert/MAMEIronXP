@@ -23,7 +23,7 @@
         <Label Content="::::::" Width="184" FontFamily="PacFont Good" FontSize="72" Foreground="Black" Background="{x:Null}" />
         <Label Content="9" Width="66" FontFamily="PacFont Good" FontSize="72" Foreground="#FFEA82E5"/>
       </StackPanel>
-      <Panel ZIndex="20">
+      <Panel ZIndex="20" HorizontalAlignment="Left">
         <Image Name="MyImage" Height="150" Width="160"/>
       </Panel>
       <Panel ZIndex="30" HorizontalAlignment="Right">
