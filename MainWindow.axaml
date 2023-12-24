@@ -22,5 +22,6 @@
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
-  </StackPanel>
+    <Image Name="MyImage"/>
+  </StackPanel>  
 </Window>

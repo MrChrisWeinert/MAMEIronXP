@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
+using Avalonia.Media.Imaging;
 using MAMEIronXP.Models;
 using Newtonsoft.Json;
 using System;
@@ -23,7 +24,7 @@ namespace MAMEIronXP
         private string _catver;
         private string _romsDirectory;
         //TODO
-        //private Dictionary<string, System.Windows.Media.ImageSource> _snapshots;
+        private Dictionary<string, Bitmap> _snapshots = new Dictionary<string, Bitmap>();
 
 
         //Note: We use an ObservableCollection (versus a List) so we can take action when the collection is changed. For example:
@@ -98,7 +99,7 @@ namespace MAMEIronXP
                 _logger.LogException(errorText, new Exception("Games did not load"));
                 Environment.Exit(1);
             }
-
+            LoadImagesIntoDictionary();
             GamesListBox.ItemsSource = _games;
             GamesListBox.SelectedIndex = 0;
             GamesListBox.SelectionMode = SelectionMode.Single;
@@ -119,18 +120,35 @@ namespace MAMEIronXP
             GamesListBox.Margin = new Avalonia.Thickness(150);
             //GamesListTextBox.FontSize = 48;
             //TODO: Hide scrollbar
-
-            //TODO: possibly use this to display other windows (exit, for example)
-            //Window.ShowDialog(this);
-
+        }
+        void LoadImagesIntoDictionary()
+        {
+            //We shouldn't run into issues loading files from disk since we already checked for valid images when we built our game list.
+            foreach (Game game in _games)
+            {
+                string filePath = Path.Combine(_snapDirectory, game.Screenshot);                
+                var image = new Bitmap(filePath);
+                _snapshots[game.Name] = image;
+            }
         }
         private void MyListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Handle the selection change
             // e.g., var selectedItem = MyListBox.SelectedItem;
+
+            var listBox = (ListBox)sender;
+            if (listBox.SelectedItem is Game selectedItem)
+            {
+                if (_snapshots.TryGetValue(selectedItem.Name, out var image))
+                {
+                    // Assuming you have an Image control named MyImage
+                    MyImage.Source = image;
+                }
+            }
         }
         private void LoadGamesFromJSON()
         {
+            //TODO: Add error handling in here in case someone hand-edits the games.json file and makes a mistake.
             using (StreamReader sr = new StreamReader(_gamesJson))
             {
                 string json = sr.ReadToEnd();
