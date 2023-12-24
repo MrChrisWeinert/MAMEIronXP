@@ -89,7 +89,7 @@ namespace MAMEIronXP
             else if (!File.Exists(_gamesJson))
             {
                 GameListInitializer gameListInitializer = new GameListInitializer();
-                foreach (Game game in gameListInitializer.GenerateGameList(_MAMEDirectory, _mameExe, _gamesJson, _snapDirectory, _catver))
+                foreach (Game game in gameListInitializer.GenerateGameList(_MAMEDirectory, _mameExe, _snapDirectory, _catver))
                 {
                     _games.Add(game);
                 }

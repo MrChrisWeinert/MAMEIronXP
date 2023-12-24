@@ -1,14 +1,12 @@
 ﻿using System.Security.Cryptography;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using System.Configuration;
 using System.Diagnostics;
-using System;
 using MAMEIronXP.Models;
+using Avalonia.Utilities;
 
 namespace MAMEIronXP
 {
@@ -18,18 +16,15 @@ namespace MAMEIronXP
         private string _mameExe;
         private string _listFull;
         private string _snapsDir;
-        private string _gamesJson;
         private string _catver;
         private List<Game> _games = new List<Game>();
         private Dictionary<string, string> _categories = new Dictionary<string, string>();
-        private Dictionary<string, float> _versions = new Dictionary<string, float>();
         private List<string> _killList = new List<string>();
 
-        public List<Game> GenerateGameList(string MAMEDirectory, string mameExe, string gamesJson, string snapDir, string catver)
+        public List<Game> GenerateGameList(string MAMEDirectory, string mameExe, string snapDir, string catver)
         {
             _MAMEDirectory = MAMEDirectory;
             _mameExe = mameExe;
-            _gamesJson = gamesJson;
             _snapsDir = snapDir;
             _catver = catver;
             _listFull = Path.Combine(_MAMEDirectory, "list.xml");
@@ -37,9 +32,10 @@ namespace MAMEIronXP
             {
                 GenerateGamesXML();
             }
-            LoadCategoriesAndVersions();
+            LoadCategories();
             ParseXMLAndFilter();
-            //cleanup
+
+            //Cleanup
             File.Delete(_listFull);
             return _games;
         }
@@ -79,64 +75,24 @@ namespace MAMEIronXP
         /// 1) Categories
         /// 2) Versions
         ///
-        /// This function reads from that file and build a list of all the games and their corresponding categories and versions.
-        /// This information is uses in further processing to filter out certain categories of games, and TODO: [does something with versions? I don't recall]
+        /// This function reads from that file and build a list of all the games and their corresponding categories.
+        /// We use filter out certain games based on their categories.
         /// </summary>
-        private void LoadCategoriesAndVersions()
+        private void LoadCategories()
         {
             using (StreamReader sr = new StreamReader(_catver))
             {
                 string line = sr.ReadLine();
-                while (line != null) // && !string.IsNullOrEmpty(line)
+                while (line != null)
                 {
-                    //if the line doesn't contain an equal sign, we don't care about it. Move along...
-                    if (!line.Contains("="))
-                    {
-                        line = sr.ReadLine();
-                        continue;
-                    }
-
-                    // if there's a "/" we know it's a category, like this:
-                    //    mspacman=Maze / Collect
-                    if (line.Contains("/"))
+                    //We're looking for Category lines which are structured like this: "mspacman=Maze / Collect"
+                    if (line.Contains("=") && line.Contains("/"))
                     {
                         var x = line.Split("=");
                         string name = x[0];
                         string category = x[1];
                         _categories.Add(name, category);
                     }
-                    // else it just has an equal sign so we know it's a game like this:
-                    //   mspacman=0.37b16
-                    else
-                    {
-                        var x = line.Split("=");
-                        string name = x[0];
-                        string ver = x[1];
-                        //TODO: Remember what the heck this is all for, and then comment it approrpriately.
-                        if (ver.Contains("b") || ver.Contains("u") || ver.Contains("rc") || ver.Contains("a"))
-                        {
-                            int letterPos=-1;
-                            if (ver.Contains("b"))
-                            {
-                                letterPos = ver.IndexOf("b");
-                            }
-                            else if (ver.Contains("u"))
-                            {
-                                letterPos = ver.IndexOf("u");
-                            }
-                            else if (ver.Contains("rc"))
-                            {
-                                letterPos = ver.IndexOf("rc");
-                            }
-                            else if (ver.Contains("a"))
-                            {
-                                letterPos = ver.IndexOf("a");
-                            }
-                            ver = ver.Substring(0, letterPos);
-                        }
-                        float version = float.Parse(ver);
-                        _versions.Add(name, version);
-                    }                    
                     line = sr.ReadLine();
                 }
             }
@@ -149,14 +105,10 @@ namespace MAMEIronXP
             doc.Load(_listFull);
             XmlNode root = doc.SelectSingleNode("mame");
             
-            //Not sure why I used a HashSet here...
-            HashSet<string> drivers = new HashSet<string>();
-            HashSet<string> statuses = new HashSet<string>();
             foreach (XmlNode node in root.SelectNodes("machine"))
             {
                 Game g = new Game();
                 g.Name = node.Attributes["name"].Value.ToString();
-                
                 if (node.Attributes["cloneof"] != null)
                 {
                     //TODO: Make this a configurable parameter via App.config?
@@ -167,74 +119,80 @@ namespace MAMEIronXP
                 string driverStatus = node.SelectSingleNode("driver")?.Attributes["status"].Value.ToString();
                 string driverEmulation = node.SelectSingleNode("driver")?.Attributes["emulation"].Value.ToString();
 
-                //TODO: Is "good" what we really want here? Are there other better statuses like "Excellent" for example?
+                //If a game's Status/Emulation aren't both good, we don't want it in the list.
                 if (driverStatus == "good" && driverEmulation == "good")
                 {
-                    float version = 0;
-                    _versions.TryGetValue(g.Name, out version);
-                    
-                    //TODO: Figure out what issues we had with version .212 and note it. Or get rid of this check.
-                    if (version != .212)
+                    g.Description = node.SelectSingleNode("description").InnerText;
+                    g.IsFavorite = false;
+
+                    g.PlayCount = 0;
+                    g.Year = node.SelectSingleNode("year").InnerText;
+                    string category = _categories.Where(x => x.Key == g.Name).FirstOrDefault().Value;
+
+                    //Only add games if they have a category. If the category is null it's likely a "system" or something that we don't otherwise want.
+                    if (category != null)
                     {
-                        g.Description = node.SelectSingleNode("description").InnerText;
-                        g.IsFavorite = false;
-
-                        g.PlayCount = 0;
-                        g.Year = node.SelectSingleNode("year").InnerText;
-                        string category = _categories.Where(x => x.Key == g.Name).FirstOrDefault().Value;
-                        if (category != null)
+                        if (!category.Contains("/"))
                         {
-                            //TODO: Make this a configurable parameter via App.config?
-                            //Just because *I* don't want Matrue games doesn't mean someone else doesn't.
-
-                            //Filter out mature games
-                            if (category.Contains("* Mature *"))
-                            {
-                                continue;
-                            }
-                            if (!category.Contains("/"))
-                            {
-                                g.Category = category;
-                                g.SubCategory = "";
-                            }
-                            else
-                            {
-                                string mainCategory = category.Substring(0, category.IndexOf("/") - 1);
-                                int start = category.IndexOf("/") + 2;
-                                int end = category.Length - start;
-                                string subCategory = category.Substring(start, end);
-                                g.Category = mainCategory;
-                                g.SubCategory = subCategory;
-                            }
-
-                            //TODO: Make this a configurable parameter via App.config?
-                            //Filter out games by category/subcategory.
-                            //I'm sure there's an easier/better way of handling this. Possibly check for "Coin Input"
-                            if (g.Category == "Electromechanical" || g.SubCategory == "Reels" || g.Category == "Casino" || g.SubCategory == "Mahjong" || (g.Category == "Rhythm" && (g.SubCategory == "Dance" || g.SubCategory == "Instruments")) || g.Category == "Home Systems" || g.Category == "Professional Systems" || g.Category == "System" || g.Category == "Ball & Paddle" || g.Description.Contains("DECO Cassette") || g.Category == "Multiplay" || g.Description.Contains("PlayChoice-10") || g.Category == "Quiz" || g.Description.Contains("bootleg") || g.Category == "Utilities" || g.Category == "Handheld" || g.Category== "Computer" || g.Category== "Game Console" || g.Category== "Slot Machine" || g.Category== "Misc." || g.Category=="Tabletop" || g.Category== "Board Game" || g.Category=="Calculator")
-                            {
-                                continue;
-                            }
-
-                            g.Screenshot = g.Name + ".png";
-                            
-                            //Only add games for which we have a valid screenshot
-                            //This is purposefully and intentionally mandatory since we want to display game images for 100% of the games in our list. 
-                            if (isValidScreenshot(Path.Combine(_snapsDir, g.Screenshot)))
-                            {
-                                _games.Add(g);
-                            }
+                            g.Category = category;
+                            g.SubCategory = "";
                         }
                         else
                         {
-                            //Is the category ever null?                         
+                            string mainCategory = category.Substring(0, category.IndexOf("/") - 1);
+                            int start = category.IndexOf("/") + 2;
+                            int end = category.Length - start;
+                            string subCategory = category.Substring(start, end);
+                            g.Category = mainCategory;
+                            g.SubCategory = subCategory;
+                        }
+                        if (node.SelectSingleNode("input")?.Attributes["coins"]?.Value == null)
+                        {
+                            //No coin input so it's probably not a traditional arcade. Skip it.
+                            continue;
+                        }
+
+                        //TODO: Make this a configurable parameter via App.config?
+                        //Filter out games by category/subcategory.
+                        //I'm sure there's an easier/better way of handling this.
+                        if (g.Category == "Electromechanical" || 
+                            g.Category.Contains("* Mature *") ||
+                            g.SubCategory.Contains("* Mature *") ||
+                            g.SubCategory == "Reels" || 
+                            g.Category == "Casino" || 
+                            g.SubCategory == "Mahjong" || 
+                            (g.Category == "Rhythm" && (g.SubCategory == "Dance" || g.SubCategory == "Instruments")) || 
+                            g.Category == "Home Systems" || 
+                            g.Category == "Professional Systems" || 
+                            g.Category == "System" || 
+                            g.Category == "Ball & Paddle" || 
+                            g.Description.Contains("DECO Cassette") || 
+                            g.Category == "Multiplay" || 
+                            g.Description.Contains("PlayChoice-10") || 
+                            g.Category == "Quiz" || 
+                            g.Description.Contains("bootleg") || 
+                            g.Category == "Utilities" || 
+                            g.Category == "Handheld" || 
+                            g.Category== "Computer" || 
+                            g.Category== "Game Console" || 
+                            g.Category== "Slot Machine" || 
+                            g.Category== "Misc." || 
+                            g.Category=="Tabletop" || 
+                            g.Category== "Board Game" || 
+                            g.Category=="Calculator")
+                        {
+                            continue;
+                        }
+
+                        g.Screenshot = g.Name + ".png";
+                            
+                        //Only add games for which we have a valid screenshot
+                        //This is purposefully and intentionally mandatory since we want to display game images for 100% of the games in our list. 
+                        if (isValidScreenshot(Path.Combine(_snapsDir, g.Screenshot)))
+                        {
+                            _games.Add(g);
                         }
                     }
-                }
-                else
-                {
-                    //TODO: Make this a configurable parameter via App.config?
-                    //If the Status/Emulation isn't good, we don't want it in our list. Skip it.
-                    continue;
                 }
             }
         }
