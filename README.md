@@ -32,3 +32,7 @@ MAME = **M**ultiple **A**rcade **M**achine **E**mulator
 Iron = Iron's chemical elemental symbol "**Fe**" (**F**ront-**E**nd)
 
 XP = **X**-**P**latform, or cross-platform
+
+
+## Performance Note (Windows)
+I like add an Anti-Virus exception so C:\MAME\roms and C:\MAME\snap directories do not get scanned.
