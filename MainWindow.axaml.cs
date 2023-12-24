@@ -1,10 +1,13 @@
 using Avalonia.Controls;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using MAMEIronXP.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Globalization;
 using System.IO;
 
 namespace MAMEIronXP
@@ -141,6 +144,34 @@ namespace MAMEIronXP
                         _games.Add(g);
                     }
                 }
+            }
+        }
+        //WIP for when we start messing with the Favorites...
+        public class FavoriteIconConverter : IValueConverter
+        {
+            public static readonly FavoriteIconConverter Instance = new();
+
+            public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+            {
+                if (value is Boolean isFavorite // && parameter is string targetCase
+                    && targetType.IsAssignableTo(typeof(string)))
+                {
+                    if (isFavorite)
+                    {
+                        return "1";
+                    }
+                    else
+                    {
+                        return "0";
+                    }
+                }
+                // converter used for the wrong type
+                return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
+            }
+
+            public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+            {
+                throw new NotSupportedException();
             }
         }
     }
