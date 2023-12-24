@@ -99,6 +99,8 @@ namespace MAMEIronXP
             GamesListBox.ItemsSource = _games;
             GamesListBox.SelectedIndex = 0;
             GamesListBox.SelectionMode = SelectionMode.Single;
+            GamesListBox.SelectionChanged += MyListBox_SelectionChanged;
+            
             //TODO: Make everything automatically scale, or perhaps have some pre-defined screen sizes, or maybe just throw values in the App.config
             if (this.ClientSize.Height < MINIMUM_Y_RESOLUTION || this.ClientSize.Width < MINIMUM_X_RESOLUTION)
             {
@@ -107,18 +109,22 @@ namespace MAMEIronXP
                 _logger.LogException(errorText, new Exception($"Screen resolution was too low {this.Width}x{this.Height}."));
                 Environment.Exit(1);
             }
-            //None of these should be hard-coded values. They should auto-scale
+            //None of these should be hard-coded values. They should auto-scale. However, the listbox must have a defined height otherwise the scrolling won't work properly.
             GamesListBox.CornerRadius = new Avalonia.CornerRadius(25);
             GamesListBox.Height = 1100;
             GamesListBox.Width = 1100;
             GamesListBox.Margin = new Avalonia.Thickness(150);
-            //GamesListBox.
             //GamesListTextBox.FontSize = 48;
             //TODO: Hide scrollbar
 
             //TODO: possibly use this to display other windows (exit, for example)
             //Window.ShowDialog(this);
 
+        }
+        private void MyListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Handle the selection change
+            // e.g., var selectedItem = MyListBox.SelectedItem;
         }
         private void LoadGamesFromJSON()
         {
