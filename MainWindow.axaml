@@ -2,12 +2,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MAMEIronXP"
         mc:Ignorable="d" d:DesignWidth="2560" d:DesignHeight="1440"
         WindowState="FullScreen"
         Cursor="None"
         x:Class="MAMEIronXP.MainWindow"
         Title="MAMEIronXP">
-<Panel>
+  <Window.Resources>
+    <local:MyConverter x:Key="isFavoriteConverter"/>
+  </Window.Resources>
+  <Panel>
     <Panel>
       <StackPanel Orientation="Horizontal" ZIndex="15" HorizontalAlignment="Right">
         <Label Content="m" Width="66" FontFamily="PacFont Good" FontSize="72" Foreground="#FF46BFEE"/>
@@ -27,7 +31,7 @@
           <ListBox.ItemTemplate>
             <DataTemplate>
               <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding IsFavorite}" FontFamily="Pacfont Good" />
+                <TextBlock Text="{Binding IsFavorite, Converter={StaticResource isFavoriteConverter}}" FontFamily="Pacfont Good" />
                 <TextBlock Text="{Binding Description}" FontFamily="Arcade" />
               </StackPanel>
             </DataTemplate>
