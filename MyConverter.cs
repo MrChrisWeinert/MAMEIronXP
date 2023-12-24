@@ -1,6 +1,5 @@
 ﻿using System;
 using Avalonia.Data.Converters;
-//using Avalonia.Data;
 using System.Globalization;
 
 namespace MAMEIronXP
