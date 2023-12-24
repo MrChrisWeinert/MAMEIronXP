@@ -52,8 +52,8 @@ namespace MAMEIronXP
             _snapDirectory = ConfigurationManager.AppSettings["SnapDirectory"];
             _romsDirectory = ConfigurationManager.AppSettings["RomsDirectory"];
 
-            //TODO
-            //_snapshots = new Dictionary<string, System.Windows.Media.ImageSource>();
+            //INFO: games.json is a file that MAMEIronXP generates once (and only once). It is the main working file that MAMEIronXP subsequently uses to load games and is also where a game's PlayCount is tracked as well as its "Favorite" status.
+            //      This file is periodically persisted back to disk if there are changes (i.e. a game is marked as a Favorite or it's Play Count is incremented).
             _gamesJson = Path.Combine(_MAMEDirectory, "games.json");
             _logger = new Logger(_logFile);
 
@@ -77,11 +77,6 @@ namespace MAMEIronXP
                 _logger.LogException(errorText, new Exception($"catver.ini {_catver} not found"));
                 Environment.Exit(1);
             }
-            else if (!File.Exists(_gamesJson))
-            {
-                GameListCreator glc = new GameListCreator();
-                glc.GenerateGameList(_MAMEDirectory, _mameExe, _gamesJson, _snapDirectory, _catver);
-            }
             else if (!Directory.Exists(_snapDirectory))
             {
                 errorText = $"Error: {_snapDirectory} was not found.";
@@ -90,6 +85,15 @@ namespace MAMEIronXP
                 Console.WriteLine(errorText);
                 _logger.LogException(errorText, new Exception($"Snap directory ({_snapDirectory}) not found"));
                 Environment.Exit(1);
+            }
+            else if (!File.Exists(_gamesJson))
+            {
+                GameListInitializer gameListInitializer = new GameListInitializer();
+                foreach (Game game in gameListInitializer.GenerateGameList(_MAMEDirectory, _mameExe, _gamesJson, _snapDirectory, _catver))
+                {
+                    _games.Add(game);
+                }
+                PersistGamesFile();
             }
             LoadGamesFromJSON();
             if (_games.Count == 0)
@@ -154,14 +158,7 @@ namespace MAMEIronXP
                 string json = sr.ReadToEnd();
                 sr.Close();
                 sr.Dispose();
-                List<Game> tempGames = JsonConvert.DeserializeObject<List<Game>>(json);
-                foreach (Game g in tempGames)
-                {
-                    if (!g.IsExcluded && !g.IsClone)
-                    {
-                        _games.Add(g);
-                    }
-                }
+                _games = JsonConvert.DeserializeObject<ObservableCollection<Game>>(json);
             }
         }
         //WIP for when we start messing with the Favorites...
@@ -190,6 +187,15 @@ namespace MAMEIronXP
             public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
             {
                 throw new NotSupportedException();
+            }
+        }
+        private void PersistGamesFile()
+        {
+            using (StreamWriter sw = new StreamWriter(_gamesJson, false))
+            {
+                string json = JsonConvert.SerializeObject(_games);
+                sw.WriteLine(json);
+                sw.Close();
             }
         }
     }

@@ -25,7 +25,6 @@ namespace MAMEIronXP.Models
         }
         public string Screenshot { get; set; }
         public string Year { get; set; }
-        public bool IsExcluded { get; set; }
         public bool IsFavorite
         {
             get => _isFavorite;
@@ -43,10 +42,9 @@ namespace MAMEIronXP.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public bool IsClone { get; set; }
         public Game()
         { }
-        public Game(string name, string description, string screenshot, string year, int playcount, bool isfavorite, bool isexcluded, string category, string subcategory, bool isclone)
+        public Game(string name, string description, string screenshot, string year, int playcount, bool isfavorite, string category, string subcategory)
         {
             Name = name;
             Description = description;
@@ -54,8 +52,6 @@ namespace MAMEIronXP.Models
             Year = year;
             PlayCount = playcount;
             IsFavorite = isfavorite;
-            IsExcluded = isexcluded;
-            IsClone = isclone;
             Category = category;
             SubCategory = subcategory;
         }
