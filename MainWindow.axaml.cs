@@ -34,6 +34,8 @@ namespace MAMEIronXP
         private DateTime _startTimeVPress;
         private const int LONGPRESSMILLISECONDS = 3000;
         private int JUMPDISTANCE = 25;
+        private const int MINIMUM_X_RESOLUTION = 640;
+        private const int MINIMUM_Y_RESOLUTION = 480;
 
         public MainWindow()
         {
@@ -97,6 +99,25 @@ namespace MAMEIronXP
             GamesListBox.ItemsSource = _games;
             GamesListBox.SelectedIndex = 0;
             GamesListBox.SelectionMode = SelectionMode.Single;
+            //TODO: Make everything automatically scale, or perhaps have some pre-defined screen sizes, or maybe just throw values in the App.config
+            if (this.ClientSize.Height < MINIMUM_Y_RESOLUTION || this.ClientSize.Width < MINIMUM_X_RESOLUTION)
+            {
+                errorText = $"Error: This application was designed to work at 640x480 resolution or higher.";
+                Console.WriteLine(errorText);
+                _logger.LogException(errorText, new Exception($"Screen resolution was too low {this.Width}x{this.Height}."));
+                Environment.Exit(1);
+            }
+            //None of these should be hard-coded values. They should auto-scale
+            GamesListBox.CornerRadius = new Avalonia.CornerRadius(25);
+            GamesListBox.Height = 1100;
+            GamesListBox.Width = 1100;
+            GamesListBox.Margin = new Avalonia.Thickness(150);
+            //GamesListBox.
+            //GamesListTextBox.FontSize = 48;
+            //TODO: Hide scrollbar
+
+            //TODO: possibly use this to display other windows (exit, for example)
+            //Window.ShowDialog(this);
 
         }
         private void LoadGamesFromJSON()
