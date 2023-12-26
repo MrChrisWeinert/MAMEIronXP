@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
+using Avalonia.Input;
 using Avalonia.Media.Imaging;
 using MAMEIronXP.Models;
 using Newtonsoft.Json;
@@ -39,6 +40,8 @@ namespace MAMEIronXP
         private DateTime _startTimeCPress;
         private DateTime _startTimeVPress;
         private const int LONGPRESSMILLISECONDS = 3000;
+
+        //TODO: Should have ways of quickly navigating through the list(jump to end, jump to beginning, "accelerate" through the list using the JUMPDISTANCE that was in MAMEIron, etc)
         private int JUMPDISTANCE = 25;
 
         public MainWindow()
@@ -51,7 +54,7 @@ namespace MAMEIronXP
             GamesListBox.SelectionChanged += GamesListBox_SelectionChanged;
             GamesListBox.KeyDown += GamesListBox_KeyDown;
             GamesListBox.KeyUp += GamesListBox_KeyUp;
-            GamesListBox.Focus();
+//            GamesListBox.Focus();
             //TODO: Make everything automatically scale, or perhaps have some pre-defined screen sizes, or maybe just throw values in the App.config
             //  None of these should be hard-coded values. However, the listbox must have a defined height otherwise the scrolling won't work properly.
             GamesListBox.CornerRadius = new Avalonia.CornerRadius(25);
@@ -88,7 +91,7 @@ namespace MAMEIronXP
 
         private void GamesListBox_KeyUp(object? sender, Avalonia.Input.KeyEventArgs e)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void GamesListBox_KeyDown(object? sender, Avalonia.Input.KeyEventArgs e)
@@ -172,9 +175,6 @@ namespace MAMEIronXP
         }
         private void GamesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Handle the selection change
-            // e.g., var selectedItem = MyListBox.SelectedItem;
-
             var listBox = (ListBox)sender;
             if (listBox.SelectedItem is Game selectedItem)
             {
@@ -240,7 +240,7 @@ namespace MAMEIronXP
                 sw.WriteLine(json);
                 sw.Close();
             }
-            _logger.LogInfo($"Games persisted to games.json.");
+            //_logger.LogInfo($"Games persisted to games.json.");
         }
         private void ToggleFavorite()
         {
