@@ -24,8 +24,8 @@
           <ListBox.ItemTemplate>
             <DataTemplate>
               <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding IsFavorite, Converter={StaticResource isFavoriteConverter}}" FontFamily="Pacfont Good" />
-                <TextBlock Text="{Binding Description}" FontFamily="Arcade" />
+                <TextBlock Text="{Binding IsFavorite, Converter={StaticResource isFavoriteConverter}}" FontFamily="PacFont Good" Width="50" FontSize="48" Padding="2"  Foreground="#FDFF00"  />
+                <TextBlock Text="{Binding Description}" FontFamily="Arcade" FontSize="48" Padding="2"/>
               </StackPanel>
             </DataTemplate>
           </ListBox.ItemTemplate>
