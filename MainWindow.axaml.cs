@@ -44,6 +44,7 @@ namespace MAMEIronXP
         public MainWindow()
         {
             InitializeComponent();
+            GamesListBox.SelectionChanged += GamesListBox_SelectionChanged;
             _MAMEDirectory = ConfigurationManager.AppSettings["MAMEDirectory"];
             _mameExe = Path.Combine(_MAMEDirectory, ConfigurationManager.AppSettings["MAMEExecutable"]);
             _mameArgs = ConfigurationManager.AppSettings["MAME_Args"];
@@ -107,7 +108,6 @@ namespace MAMEIronXP
             GamesListBox.ItemsSource = _games;
             GamesListBox.SelectedIndex = 0;
             GamesListBox.SelectionMode = SelectionMode.Single;
-            GamesListBox.SelectionChanged += MyListBox_SelectionChanged;
             
             //TODO: Make everything automatically scale, or perhaps have some pre-defined screen sizes, or maybe just throw values in the App.config
             if (this.ClientSize.Height < MINIMUM_Y_RESOLUTION || this.ClientSize.Width < MINIMUM_X_RESOLUTION)
@@ -135,7 +135,7 @@ namespace MAMEIronXP
                 _snapshots[game.Name] = image;
             }
         }
-        private void MyListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void GamesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Handle the selection change
             // e.g., var selectedItem = MyListBox.SelectedItem;
@@ -145,8 +145,7 @@ namespace MAMEIronXP
             {
                 if (_snapshots.TryGetValue(selectedItem.Name, out var image))
                 {
-                    // Assuming you have an Image control named MyImage
-                    MyImage.Source = image;
+                    GameSnapshot.Source = image;
                 }
             }
         }

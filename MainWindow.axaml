@@ -17,7 +17,7 @@
         <Image Source="avares://MAMEIronXP/Assets/MAMEIronXPTitle.png" Width="900" />
       </Panel>
       <Panel ZIndex="20" HorizontalAlignment="Left">
-        <Image Name="MyImage" Height="150" Width="160"/>
+        <Image Name="GameSnapshot" Height="150" Width="160"/>
       </Panel>
       <Panel ZIndex="30" HorizontalAlignment="Right">
         <ListBox x:Name="GamesListBox">
