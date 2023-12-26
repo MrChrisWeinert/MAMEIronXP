@@ -11,7 +11,8 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Threading;
+using System.Linq;
+
 
 namespace MAMEIronXP
 {
