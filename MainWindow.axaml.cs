@@ -176,13 +176,13 @@ namespace MAMEIronXP
         private void GamesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var listBox = (ListBox)sender;
-            if (listBox.SelectedItem is Game selectedItem)
+            if (listBox.SelectedItem is Game game)
             {
-                if (_snapshots.TryGetValue(selectedItem.Name, out var image))
+                if (_snapshots.TryGetValue(game.Name, out var image))
                 {
                     GameSnapshot.Source = image;
                 }
-                GameMetadata.Text = $"Year: {selectedItem.Year}   Plays: {selectedItem.PlayCount}";
+                GameMetadata.Text = $"Year: {game.Year}   Plays: {game.PlayCount}";
             }
         }
         
