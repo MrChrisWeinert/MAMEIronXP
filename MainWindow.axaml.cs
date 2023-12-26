@@ -60,8 +60,29 @@ namespace MAMEIronXP
             //GamesListTextBox.FontSize = 48;
             //TODO: Hide scrollbar
 
-            //ExitWindow exitWindow = new ExitWindow();
-            //exitWindow.Show();
+            this.PointerPressed += MainWindow_PointerPressed;
+            
+            //GamesListBox.Focus();
+            //GamesListBox.AttachedToVisualTree += (s, e) => GamesListBox.Focus();
+            //this.Focus();
+            //this.KeyDown += MainWindow_KeyDown;
+        }
+
+        //private void MainWindow_KeyDown(object? sender, KeyEventArgs e)
+        //{
+        //    GamesListBox.Focus();
+        //}
+
+        private void MainWindow_PointerPressed(object? sender, PointerPressedEventArgs e)
+        {
+            var x = e.GetCurrentPoint(this).Properties;
+
+            //The Tankstick's "exit" button at the top right is mapped to a Middle Mouse-click.
+            if (x.IsMiddleButtonPressed)
+            {
+                ExitWindow exitWindow = new ExitWindow();
+                exitWindow.Show();
+            }
         }
 
         private void GamesListBox_KeyUp(object? sender, Avalonia.Input.KeyEventArgs e)
