@@ -13,16 +13,9 @@
   </Window.Resources>
   <Panel>
     <Panel>
-      <StackPanel Orientation="Horizontal" ZIndex="15" HorizontalAlignment="Right">
-        <Label Content="m" Width="66" FontFamily="PacFont Good" FontSize="72" Foreground="#FF46BFEE"/>
-        <Label Content="AME" Margin="-9,0,0,0" Width="240" FontFamily="PacFont Good" FontSize="72" Foreground="Black"/>
-        <Label Content="i" Width="34" FontFamily="PacFont Good" FontSize="72" Foreground="#FF46BFEE"/>
-        <Label Content="RON" Margin="-5,0,0,0" Width="202" FontFamily="PacFont Good" FontSize="72" Foreground="Black"/>
-        <Label Content="xp" Width="200" FontFamily="PacFont Good" FontSize="72" Foreground="#FF46BFEE"/>
-        <Label Content="1" Width="70" FontFamily="PacFont Good" FontSize="72" Background="#00FDFF00" Foreground="#FFFDFF00"/>
-        <Label Content="::::::" Width="184" FontFamily="PacFont Good" FontSize="72" Foreground="Black" Background="{x:Null}" />
-        <Label Content="9" Width="66" FontFamily="PacFont Good" FontSize="72" Foreground="#FFEA82E5"/>
-      </StackPanel>
+      <Panel ZIndex="15" HorizontalAlignment="Right" VerticalAlignment="Top">
+        <Image Source="avares://MAMEIronXP/Assets/MAMEIronXPTitle.png" Width="900" />
+      </Panel>
       <Panel ZIndex="20" HorizontalAlignment="Left">
         <Image Name="MyImage" Height="150" Width="160"/>
       </Panel>
