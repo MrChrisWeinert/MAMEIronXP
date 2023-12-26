@@ -154,9 +154,8 @@ namespace MAMEIronXP
                 {
                     GameSnapshot.Source = image;
                 }
+                GameMetadata.Text = $"Year: {selectedItem.Year}   Plays: {selectedItem.PlayCount}";
             }
-
-            //GameMetadata.Content = $"Year: {game.Year}   Plays: {game.PlayCount}";
         }
         
         private void LoadGamesFromJSON()
