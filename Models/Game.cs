@@ -31,14 +31,9 @@ namespace MAMEIronXP.Models
             SubCategory = subcategory;
         }
 
-        public bool ToggleFavorite()
+        public void ToggleFavorite()
         {
-            //IsFavorite ^= IsFavorite;
-            if (!IsFavorite)
-                IsFavorite = true;
-            else
-                IsFavorite = false;
-            return IsFavorite;
+            IsFavorite = !IsFavorite;
         }
         public void IncrementPlayCount()
         {
