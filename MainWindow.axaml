@@ -9,7 +9,7 @@
         x:Class="MAMEIronXP.MainWindow"
         Title="MAMEIronXP">
   <Window.Resources>
-    <local:MyConverter x:Key="isFavoriteConverter"/>
+    <local:IsFavoriteConverter x:Key="isFavoriteConverter"/>
   </Window.Resources>
   <Panel>
     <Panel>
