@@ -8,8 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Threading;
 
 namespace MAMEIronXP
 {
@@ -23,7 +25,6 @@ namespace MAMEIronXP
         private string _logFile;
         private string _catver;
         private string _romsDirectory;
-        //TODO
         private Dictionary<string, Bitmap> _snapshots = new Dictionary<string, Bitmap>();
 
 
@@ -38,13 +39,44 @@ namespace MAMEIronXP
         private DateTime _startTimeVPress;
         private const int LONGPRESSMILLISECONDS = 3000;
         private int JUMPDISTANCE = 25;
-        private const int MINIMUM_X_RESOLUTION = 640;
-        private const int MINIMUM_Y_RESOLUTION = 480;
 
         public MainWindow()
         {
             InitializeComponent();
+            PrepareForLaunch();
+            GamesListBox.ItemsSource = _games;
+            GamesListBox.SelectedIndex = 0;
+            GamesListBox.SelectionMode = SelectionMode.Single;
             GamesListBox.SelectionChanged += GamesListBox_SelectionChanged;
+            GamesListBox.KeyDown += GamesListBox_KeyDown;
+            GamesListBox.KeyUp += GamesListBox_KeyUp;
+            GamesListBox.Focus();
+            //TODO: Make everything automatically scale, or perhaps have some pre-defined screen sizes, or maybe just throw values in the App.config
+            //  None of these should be hard-coded values. However, the listbox must have a defined height otherwise the scrolling won't work properly.
+            GamesListBox.CornerRadius = new Avalonia.CornerRadius(25);
+            GamesListBox.Height = 1100;
+            GamesListBox.Width = 1100;
+            GamesListBox.Margin = new Avalonia.Thickness(150);
+            //GamesListTextBox.FontSize = 48;
+            //TODO: Hide scrollbar
+
+            //ExitWindow exitWindow = new ExitWindow();
+            //exitWindow.Show();
+        }
+
+        private void GamesListBox_KeyUp(object? sender, Avalonia.Input.KeyEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void GamesListBox_KeyDown(object? sender, Avalonia.Input.KeyEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void PrepareForLaunch()
+        {
+            //Initialize all our private variables
             _MAMEDirectory = ConfigurationManager.AppSettings["MAMEDirectory"];
             _mameExe = Path.Combine(_MAMEDirectory, ConfigurationManager.AppSettings["MAMEExecutable"]);
             _mameArgs = ConfigurationManager.AppSettings["MAME_Args"];
@@ -52,13 +84,11 @@ namespace MAMEIronXP
             _catver = ConfigurationManager.AppSettings["catverFile"];
             _snapDirectory = ConfigurationManager.AppSettings["SnapDirectory"];
             _romsDirectory = ConfigurationManager.AppSettings["RomsDirectory"];
-
-            //INFO: games.json is a file that MAMEIronXP generates once (and only once). It is the main working file that MAMEIronXP subsequently uses to load games and is also where a game's PlayCount is tracked as well as its "Favorite" status.
-            //      This file is periodically persisted back to disk if there are changes (i.e. a game is marked as a Favorite or it's Play Count is incremented).
             _gamesJson = Path.Combine(_MAMEDirectory, "games.json");
             _logger = new Logger(_logFile);
 
-            //Sanity checks
+
+            //Check prerequisites and generate games.json if it doesn't exist
             string errorText;
             if (!File.Exists(_mameExe))
             {
@@ -89,6 +119,8 @@ namespace MAMEIronXP
             }
             else if (!File.Exists(_gamesJson))
             {
+                //INFO: games.json is a file that MAMEIronXP generates once (and only once). It is the main working file that MAMEIronXP subsequently uses to load games and is also where a game's PlayCount is tracked as well as its "Favorite" status.
+                //      This file is periodically persisted back to disk if there are changes (i.e. a game is marked as a Favorite or it's Play Count is incremented).
                 GameListInitializer gameListInitializer = new GameListInitializer();
                 foreach (Game game in gameListInitializer.GenerateGameList(_MAMEDirectory, _mameExe, _snapDirectory, _catver))
                 {
@@ -97,34 +129,9 @@ namespace MAMEIronXP
                 PersistGamesFile();
             }
             LoadGamesFromJSON();
-            if (_games.Count == 0)
-            {
-                errorText = $"Error: Unable to load games.";
-                Console.WriteLine(errorText);
-                _logger.LogException(errorText, new Exception("Games did not load"));
-                Environment.Exit(1);
-            }
             LoadImagesIntoDictionary();
-            GamesListBox.ItemsSource = _games;
-            GamesListBox.SelectedIndex = 0;
-            GamesListBox.SelectionMode = SelectionMode.Single;
-            
-            //TODO: Make everything automatically scale, or perhaps have some pre-defined screen sizes, or maybe just throw values in the App.config
-            if (this.ClientSize.Height < MINIMUM_Y_RESOLUTION || this.ClientSize.Width < MINIMUM_X_RESOLUTION)
-            {
-                errorText = $"Error: This application was designed to work at 640x480 resolution or higher.";
-                Console.WriteLine(errorText);
-                _logger.LogException(errorText, new Exception($"Screen resolution was too low {this.Width}x{this.Height}."));
-                Environment.Exit(1);
-            }
-            //None of these should be hard-coded values. They should auto-scale. However, the listbox must have a defined height otherwise the scrolling won't work properly.
-            GamesListBox.CornerRadius = new Avalonia.CornerRadius(25);
-            GamesListBox.Height = 1100;
-            GamesListBox.Width = 1100;
-            GamesListBox.Margin = new Avalonia.Thickness(150);
-            //GamesListTextBox.FontSize = 48;
-            //TODO: Hide scrollbar
         }
+
         void LoadImagesIntoDictionary()
         {
             //We shouldn't run into issues loading files from disk since we already checked for valid images when we built our game list.
@@ -148,7 +155,10 @@ namespace MAMEIronXP
                     GameSnapshot.Source = image;
                 }
             }
+
+            //GameMetadata.Content = $"Year: {game.Year}   Plays: {game.PlayCount}";
         }
+        
         private void LoadGamesFromJSON()
         {
             //TODO: Add error handling in here in case someone hand-edits the games.json file and makes a mistake.
@@ -159,8 +169,15 @@ namespace MAMEIronXP
                 sr.Dispose();
                 _games = JsonConvert.DeserializeObject<ObservableCollection<Game>>(json);
             }
+            if (_games.Count == 0)
+            {
+                string errorText = $"Error: Unable to load games.";
+                Console.WriteLine(errorText);
+                _logger.LogException(errorText, new Exception("Games did not load"));
+                Environment.Exit(1);
+            }
         }
-        //WIP for when we start messing with the Favorites...
+        
         public class FavoriteIconConverter : IValueConverter
         {
             public static readonly FavoriteIconConverter Instance = new();
@@ -196,6 +213,8 @@ namespace MAMEIronXP
                 sw.WriteLine(json);
                 sw.Close();
             }
+            _logger.LogInfo($"Games persisted to games.json.");
         }
+
     }
 }
