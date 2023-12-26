@@ -92,7 +92,13 @@ namespace MAMEIronXP
 
         private void GamesListBox_KeyDown(object? sender, Avalonia.Input.KeyEventArgs e)
         {
-            throw new NotImplementedException();
+            switch (e.Key)
+            {
+                case Key.C:
+                    e.Handled = true;
+                    ToggleFavorite();
+                break;
+            }
         }
 
         private void PrepareForLaunch()
@@ -235,6 +241,22 @@ namespace MAMEIronXP
             }
             _logger.LogInfo($"Games persisted to games.json.");
         }
+        private void ToggleFavorite()
+        {
+            
+            _games.Single(x => x.Name == ((Game)GamesListBox.SelectedItem).Name).ToggleFavorite();
+            //PlaySound("pacman_cherry.wav");
+            //((Game)GamesListBox.SelectedItem).ToggleFavorite();
+            //_logger.LogInfo($"Just toggled {((Game)GamesListBox.SelectedItem).Name}. Favorite is now set to: {((Game)GamesListBox.SelectedItem).IsFavorite}");
+            PersistGamesFile();
 
+            //GamesListBox.ItemsSource = GetUpdatedGameList();
+            //GamesListBox.Items.Refresh();
+
+            //if (GamesListBox.SelectedIndex <= 0 && _selectedIndex > 0)
+            //{
+            //    GamesListBox.SelectedIndex = _selectedIndex;
+            //}
+        }
     }
 }
