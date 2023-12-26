@@ -107,8 +107,7 @@ namespace MAMEIronXP
             
             foreach (XmlNode node in root.SelectNodes("machine"))
             {
-                Game g = new Game();
-                g.Name = node.Attributes["name"].Value.ToString();
+                string gameName = node.Attributes["name"].Value.ToString();
                 if (node.Attributes["cloneof"] != null)
                 {
                     //TODO: Make this a configurable parameter via App.config?
@@ -122,20 +121,18 @@ namespace MAMEIronXP
                 //If a game's Status/Emulation aren't both good, we don't want it in the list.
                 if (driverStatus == "good" && driverEmulation == "good")
                 {
-                    g.Description = node.SelectSingleNode("description").InnerText;
-                    g.IsFavorite = false;
-
-                    g.PlayCount = 0;
-                    g.Year = node.SelectSingleNode("year").InnerText;
-                    string category = _categories.Where(x => x.Key == g.Name).FirstOrDefault().Value;
+                    string gameDescription = node.SelectSingleNode("description").InnerText;
+                    string gameYear = node.SelectSingleNode("year").InnerText;
+                    string category = _categories.Where(x => x.Key == gameName).FirstOrDefault().Value;
+                    string gameCategory = "";
+                    string gameSubCategory = "";
 
                     //Only add games if they have a category. If the category is null it's likely a "system" or something that we don't otherwise want.
                     if (category != null)
                     {
                         if (!category.Contains("/"))
                         {
-                            g.Category = category;
-                            g.SubCategory = "";
+                            gameCategory = category;
                         }
                         else
                         {
@@ -143,8 +140,8 @@ namespace MAMEIronXP
                             int start = category.IndexOf("/") + 2;
                             int end = category.Length - start;
                             string subCategory = category.Substring(start, end);
-                            g.Category = mainCategory;
-                            g.SubCategory = subCategory;
+                            gameCategory = mainCategory;
+                            gameSubCategory = subCategory;
                         }
                         if (node.SelectSingleNode("input")?.Attributes["coins"]?.Value == null)
                         {
@@ -155,42 +152,42 @@ namespace MAMEIronXP
                         //TODO: Make this a configurable parameter via App.config?
                         //Filter out games by category/subcategory.
                         //I'm sure there's an easier/better way of handling this.
-                        if (g.Category == "Electromechanical" || 
-                            g.Category.Contains("* Mature *") ||
-                            g.SubCategory.Contains("* Mature *") ||
-                            g.SubCategory == "Reels" || 
-                            g.Category == "Casino" || 
-                            g.SubCategory == "Mahjong" || 
-                            (g.Category == "Rhythm" && (g.SubCategory == "Dance" || g.SubCategory == "Instruments")) || 
-                            g.Category == "Home Systems" || 
-                            g.Category == "Professional Systems" || 
-                            g.Category == "System" || 
-                            g.Category == "Ball & Paddle" || 
-                            g.Description.Contains("DECO Cassette") || 
-                            g.Category == "Multiplay" || 
-                            g.Description.Contains("PlayChoice-10") || 
-                            g.Category == "Quiz" || 
-                            g.Description.Contains("bootleg") || 
-                            g.Category == "Utilities" || 
-                            g.Category == "Handheld" || 
-                            g.Category== "Computer" || 
-                            g.Category== "Game Console" || 
-                            g.Category== "Slot Machine" || 
-                            g.Category== "Misc." || 
-                            g.Category=="Tabletop" || 
-                            g.Category== "Board Game" || 
-                            g.Category=="Calculator")
+                        if (gameCategory == "Electromechanical" || 
+                            gameCategory.Contains("* Mature *") ||
+                            gameSubCategory.Contains("* Mature *") ||
+                            gameSubCategory == "Reels" || 
+                            gameCategory == "Casino" || 
+                            gameSubCategory == "Mahjong" || 
+                            (gameCategory == "Rhythm" && (gameSubCategory == "Dance" || gameSubCategory == "Instruments")) || 
+                            gameCategory == "Home Systems" || 
+                            gameCategory == "Professional Systems" || 
+                            gameCategory == "System" || 
+                            gameCategory == "Ball & Paddle" ||
+                            gameDescription.Contains("DECO Cassette") || 
+                            gameCategory == "Multiplay" ||
+                            gameDescription.Contains("PlayChoice-10") || 
+                            gameCategory == "Quiz" ||
+                            gameDescription.Contains("bootleg") || 
+                            gameCategory == "Utilities" || 
+                            gameCategory == "Handheld" || 
+                            gameCategory== "Computer" || 
+                            gameCategory== "Game Console" || 
+                            gameCategory== "Slot Machine" || 
+                            gameCategory== "Misc." || 
+                            gameCategory=="Tabletop" || 
+                            gameCategory== "Board Game" || 
+                            gameCategory=="Calculator")
                         {
                             continue;
                         }
 
-                        g.Screenshot = g.Name + ".png";
+                        string gameScreenshot = gameName + ".png";
                             
                         //Only add games for which we have a valid screenshot
                         //This is purposefully and intentionally mandatory since we want to display game images for 100% of the games in our list. 
-                        if (isValidScreenshot(Path.Combine(_snapsDir, g.Screenshot)))
+                        if (isValidScreenshot(Path.Combine(_snapsDir, gameScreenshot)))
                         {
-                            _games.Add(g);
+                            _games.Add(new Game(gameName, gameDescription, gameScreenshot, gameYear, 0, false, gameCategory, gameSubCategory));
                         }
                     }
                 }

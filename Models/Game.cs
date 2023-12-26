@@ -1,49 +1,24 @@
-﻿using System.Collections.Specialized;
-using System.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace MAMEIronXP.Models
 {
-    public class Game : INotifyCollectionChanged
+    /// <summary>
+    /// The CommunityToolkit.Mvvm nuget project lets us (easily) mark properties as Observable.
+    /// We are binding an ObservableCollection<Game> to the UI controls (ListBox, TextBlock, etc.) so when these Observable properties are updated, the UI will update automatically.
+    /// </summary>
+    public partial class Game : ObservableObject
     {
+        [ObservableProperty]
         private int _playCount;
+        [ObservableProperty]
         private bool _isFavorite;
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Category { get; set; }
-        public string SubCategory { get; set; }
-        public int PlayCount
-        {
-            get => _playCount;
-            set
-            {
-                if (_playCount != value)
-                {
-                    _playCount = value;
-                    OnPropertyChanged(nameof(PlayCount));
-                }
-            }
-        }
-        public string Screenshot { get; set; }
-        public string Year { get; set; }
-        public bool IsFavorite
-        {
-            get => _isFavorite;
-            set
-            {
-                if (_isFavorite != value)
-                {
-                    _isFavorite = value;
-                    OnPropertyChanged(nameof(IsFavorite));
-                }
-            }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public Game()
-        { }
+        public string Name { get; }
+        public string Description { get; }
+        public string Category { get; }
+        public string SubCategory { get; }
+        public string Screenshot { get; }
+        public string Year { get; }
+
         public Game(string name, string description, string screenshot, string year, int playcount, bool isfavorite, string category, string subcategory)
         {
             Name = name;
@@ -56,12 +31,6 @@ namespace MAMEIronXP.Models
             SubCategory = subcategory;
         }
 
-        public event NotifyCollectionChangedEventHandler? CollectionChanged;
-
-        /// <summary>
-        /// Toggles the "IsFavorite" flag
-        /// </summary>
-        /// <returns>current status</returns>
         public bool ToggleFavorite()
         {
             //IsFavorite ^= IsFavorite;
