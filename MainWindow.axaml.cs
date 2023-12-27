@@ -102,6 +102,15 @@ namespace MAMEIronXP
                     e.Handled = true;
                     ToggleFavorite();
                 break;
+                case Key.D1:
+                    e.Handled = true;
+                    var listBox = (ListBox)sender;
+                    if (listBox.SelectedItem is Game game)
+                    {
+                        StartGame(game);
+                    }                        
+                break;
+
             }
         }
 
@@ -241,6 +250,27 @@ namespace MAMEIronXP
                 sw.Close();
             }
             //_logger.LogInfo($"Games persisted to games.json.");
+        }
+        private void StartGame(Game game)
+        {
+            string st = _mameExe;
+            Process process = new Process();
+            process.StartInfo.FileName = st;
+            process.StartInfo.WorkingDirectory = _MAMEDirectory;
+            process.StartInfo.Arguments = game.Name + " " + _mameArgs;
+            process.StartInfo.UseShellExecute = true;
+            process.Start();
+            process.WaitForExit();
+            if (process.ExitCode == 0)
+            {
+                game.IncrementPlayCount();
+                PersistGamesFile();
+            }
+            else
+            {
+                _logger.LogInfo($"Couldn't start game: {game.Name} via {st}.");
+            }
+            process.Close();
         }
         private void ToggleFavorite()
         {
