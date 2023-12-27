@@ -130,6 +130,21 @@ namespace MAMEIronXP
 
             //Check prerequisites and generate games.json if it doesn't exist
             string errorText;
+            if (!File.Exists(_logFile))
+            {
+                //attempt to create the log file and bail out if it can't be created.
+                try
+                {
+                    File.Create(_logFile);
+                }
+                catch (Exception ex)
+                {
+                    errorText = $"Error: Unable to create log file here: {_logFile}";
+                    Console.WriteLine(errorText);
+                    Console.WriteLine("2) Check the LogFile setting in the App.config to make sure you're pointed at a location suitable for logging.");
+                    Environment.Exit(1);
+                }
+            }
             if (!File.Exists(_mameExe))
             {
                 errorText = $"Error: {_mameExe} was not found.";
