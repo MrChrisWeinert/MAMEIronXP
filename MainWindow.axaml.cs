@@ -141,7 +141,7 @@ namespace MAMEIronXP
                 {
                     errorText = $"Error: Unable to create log file here: {_logFile}";
                     Console.WriteLine(errorText);
-                    Console.WriteLine("2) Check the LogFile setting in the App.config to make sure you're pointed at a location suitable for logging.");
+                    Console.WriteLine("1) Check the LogFile setting in the App.config to make sure you're pointed at a location suitable for logging.");
                     Environment.Exit(1);
                 }
             }
