@@ -14,10 +14,6 @@ namespace MAMEIronXP
         {
             WriteToLogFile(message);
         }
-        public void LogException(string message, Exception ex)
-        {
-            WriteToLogFile($"{message}=====Exception: {ex.ToString()}");
-        }
         private void WriteToLogFile(string text)
         {
             using (StreamWriter sw = File.AppendText(_logfile))

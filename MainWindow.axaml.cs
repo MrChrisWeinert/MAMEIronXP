@@ -151,7 +151,7 @@ namespace MAMEIronXP
                 Console.WriteLine(errorText);
                 Console.WriteLine("1) Ensure all prerequisite are met (https://github.com/MrChrisWeinert/MAMEIronXP#prerequisites)");
                 Console.WriteLine("2) Check the MAMEDirectory setting in the App.config to make sure you're pointed at your MAME executable.");
-                _logger.LogException(errorText, new Exception($"MAME executable ({_mameExe}) not found"));
+                _logger.LogInfo(errorText);
                 Environment.Exit(1);
             }
             else if (!File.Exists(_catver))
@@ -160,7 +160,7 @@ namespace MAMEIronXP
                 Console.WriteLine("1) Ensure all prerequisite are met (https://github.com/MrChrisWeinert/MAMEIronXP#prerequisites)");
                 Console.WriteLine("2) Verify that your MAMEDirectory setting in the App.config is correct and that catver.ini exists in that directory.");
                 Console.WriteLine(errorText);
-                _logger.LogException(errorText, new Exception($"catver.ini {_catver} not found"));
+                _logger.LogInfo(errorText);
                 Environment.Exit(1);
             }
             else if (!Directory.Exists(_snapDirectory))
@@ -169,7 +169,7 @@ namespace MAMEIronXP
                 Console.WriteLine("1) Ensure all prerequisite are met (https://github.com/MrChrisWeinert/MAMEIronXP#prerequisites)");
                 Console.WriteLine("2) Verify that your MAMEDirectory setting in the App.config is correct and that your roms directory exists that directory.");
                 Console.WriteLine(errorText);
-                _logger.LogException(errorText, new Exception($"Snap directory ({_snapDirectory}) not found"));
+                _logger.LogInfo(errorText);
                 Environment.Exit(1);
             }
             else if (!File.Exists(_gamesJson))
@@ -224,7 +224,7 @@ namespace MAMEIronXP
             {
                 string errorText = $"Error: Unable to load games.";
                 Console.WriteLine(errorText);
-                _logger.LogException(errorText, new Exception("Games did not load"));
+                _logger.LogInfo(errorText);
                 Environment.Exit(1);
             }
         }
