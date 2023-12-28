@@ -54,12 +54,11 @@ namespace MAMEIronXP
             GamesListBox.SelectionChanged += GamesListBox_SelectionChanged;
             GamesListBox.KeyDown += GamesListBox_KeyDown;
             GamesListBox.KeyUp += GamesListBox_KeyUp;
-//            GamesListBox.Focus();
             //TODO: Make everything automatically scale, or perhaps have some pre-defined screen sizes, or maybe just throw values in the App.config
             //  None of these should be hard-coded values. However, the listbox must have a defined height otherwise the scrolling won't work properly.
             GamesListBox.CornerRadius = new Avalonia.CornerRadius(25);
 
-            this.PointerPressed += MainWindow_PointerPressed;
+            PointerPressed += MainWindow_PointerPressed;
         }
 
         private void MainWindow_PointerPressed(object? sender, PointerPressedEventArgs e)
