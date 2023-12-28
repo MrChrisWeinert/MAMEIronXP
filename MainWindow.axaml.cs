@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using MAMEIronXP.Models;
 using Newtonsoft.Json;
@@ -60,7 +61,12 @@ namespace MAMEIronXP
 
             PointerPressed += MainWindow_PointerPressed;
         }
-
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            GamesListBox.Focus();
+            DisplaySnapshot((Game)GamesListBox.SelectedItem);
+            DisplayMetadata((Game)GamesListBox.SelectedItem);
+        }
         private void MainWindow_PointerPressed(object? sender, PointerPressedEventArgs e)
         {
             var x = e.GetCurrentPoint(this).Properties;
@@ -94,7 +100,6 @@ namespace MAMEIronXP
                         StartGame(game);
                     }                        
                 break;
-
             }
         }
 
@@ -186,14 +191,27 @@ namespace MAMEIronXP
             var listBox = (ListBox)sender;
             if (listBox.SelectedItem is Game game)
             {
-                if (_snapshots.TryGetValue(game.Name, out var image))
-                {
-                    GameSnapshot.Source = image;
-                }
-                GameMetadata.Text = $"Year: {game.Year}   Plays: {game.PlayCount}";
+                DisplaySnapshot(game);
+                DisplayMetadata(game);
             }
         }
-        
+        private void DisplaySnapshot(Game game)
+        {
+            if (_snapshots.TryGetValue(game.Name, out var image))
+            {
+                GameSnapshot.Source = image;
+            }
+        }
+        private void DisplayMetadata(Game game)
+        {
+            string subCategory = "";
+            if (!string.IsNullOrEmpty(game.SubCategory))
+            {
+                subCategory = $"/{game.SubCategory}";
+            }
+            GameMetadata.Text = $"Year: {game.Year}   Plays: {game.PlayCount}   Category/Subcategory: {game.Category}{subCategory}";
+        }
+
         private void LoadGamesFromJSON()
         {
             //TODO: Add error handling in here in case someone hand-edits the games.json file and makes a mistake.
