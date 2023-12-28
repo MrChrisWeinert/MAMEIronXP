@@ -7,36 +7,50 @@
         WindowState="FullScreen"
         Cursor="None"
         x:Class="MAMEIronXP.MainWindow"
-        Title="MAMEIronXP">
+        Title="MAMEIronXP" Background="Black">
   <Window.Resources>
     <local:IsFavoriteConverter x:Key="isFavoriteConverter"/>
   </Window.Resources>
+  <!--
+    The layer order, from back to front, should be like this:
+    1) Black background. This provides the arcade's black screen upon which the screenshot will lay.
+    2) Game screenshot.
+    3) MAMEIronXPCabinetV3.png which has a transparent screens so we can see the game screenshot behind it.
+    4a) GameListBox
+    4b) GameMetadata
+    4c) MAMEIronXPTitle.png
+  -->
   <Panel>
-    <Panel>
-      <Panel ZIndex="15" HorizontalAlignment="Right" VerticalAlignment="Top">
-        <Image Source="avares://MAMEIronXP/Assets/MAMEIronXPTitle.png" Width="900" />
+    <Grid ShowGridLines="false" ColumnDefinitions="*,*" RowDefinitions="*">
+      <Panel ZIndex="30" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+        <Image Source="avares://MAMEIronXP/Assets/MAMEIronXPCabinetV3.png"  />
       </Panel>
-      <Panel ZIndex="20" HorizontalAlignment="Left">
-        <Image Name="GameSnapshot" Height="150" Width="160"/>
+      <Panel ZIndex="20" Grid.Row="0" Grid.Column="0">
+        <Image Name="GameSnapshot" />
       </Panel>
-      <Panel ZIndex="30" HorizontalAlignment="Right">
-        <ListBox x:Name="GamesListBox">
-          <ListBox.ItemTemplate>
-            <DataTemplate>
-              <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding IsFavorite, Converter={StaticResource isFavoriteConverter}}" FontFamily="PacFont Good" Width="50" FontSize="48" Padding="2"  Foreground="#FDFF00"  />
-                <TextBlock Text="{Binding Description}" FontFamily="Arcade" FontSize="48" Padding="2"/>
-              </StackPanel>
-            </DataTemplate>
-          </ListBox.ItemTemplate>
-        </ListBox>
-      </Panel>
-      <Panel ZIndex="10">
-        <Image Source="avares://MAMEIronXP/Assets/MAMEIronXPCabinetV2.png" />
-      </Panel>
-      <Panel ZIndex="40" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+      <Panel ZIndex="40" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="0" Grid.Column="0">
         <TextBox x:Name="GameMetadata" FontFamily="Arcade" FontSize="24"></TextBox>
       </Panel>
-    </Panel>
+      <Panel ZIndex="40" Grid.Row="0" Grid.Column="1">
+        <Grid ShowGridLines="false" ColumnDefinitions="*,*,*,*,*,*,*,*,*,*" RowDefinitions="*,*,*,*,*,*,*,*,*,*">
+          <Panel HorizontalAlignment="Left" VerticalAlignment="Top"  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="8">
+            <Image Source="avares://MAMEIronXP/Assets/MAMEIronXPTitle.png" />
+          </Panel>
+          <Panel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="8" Grid.RowSpan="8">
+            <ListBox x:Name="GamesListBox" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <StackPanel Orientation="Horizontal">
+                    <Image IsVisible="{Binding IsFavorite}"  Width="50" Height="50" Source="avares://MAMEIronXP/Assets/MAMEIronXPFavorite.png" ></Image>
+                    <Image IsVisible="{Binding !IsFavorite}" Width="50" Height="50" Source=""></Image>
+                    <TextBlock Text="{Binding Description}" FontFamily="Arcade" x:Name="GameTextBlock" FontSize="48" Height="35" />
+                  </StackPanel>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </Panel>
+        </Grid>
+      </Panel>
+    </Grid>
   </Panel>
 </Window>
