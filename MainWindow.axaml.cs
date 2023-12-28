@@ -162,7 +162,7 @@ namespace MAMEIronXP
                 //INFO: games.json is a file that MAMEIronXP generates once (and only once). It is the main working file that MAMEIronXP subsequently uses to load games and is also where a game's PlayCount is tracked as well as its "Favorite" status.
                 //      This file is periodically persisted back to disk if there are changes (i.e. a game is marked as a Favorite or it's Play Count is incremented).
                 GameListInitializer gameListInitializer = new GameListInitializer();
-                foreach (Game game in gameListInitializer.GenerateGameList(_MAMEDirectory, _mameExe, _snapDirectory, _catver))
+                foreach (Game game in gameListInitializer.GenerateGameList(_MAMEDirectory, _mameExe, _snapDirectory, _catver).OrderBy(x => x.Description))
                 {
                     _games.Add(game);
                 }
@@ -203,7 +203,16 @@ namespace MAMEIronXP
                 string json = sr.ReadToEnd();
                 sr.Close();
                 sr.Dispose();
-                _games = JsonConvert.DeserializeObject<ObservableCollection<Game>>(json);
+                var tempListOfGames = JsonConvert.DeserializeObject<ObservableCollection<Game>>(json);
+                //Ensure favorites show up at the top of the list
+                foreach (Game game in tempListOfGames.Where(y => y.IsFavorite == true).OrderBy(y => y.Description))
+                {
+                    _games.Add(game);
+                }
+                foreach (Game game in tempListOfGames.Where(y => y.IsFavorite == false).OrderBy(y => y.Description))
+                {
+                    _games.Add(game);
+                }
             }
             if (_games.Count == 0)
             {
@@ -282,6 +291,7 @@ namespace MAMEIronXP
             PersistGamesFile();
 
             //GamesListBox.ItemsSource = GetUpdatedGameList();
+            //TODO: Rebind games to the ListBox so the change is displayed immediately
             //GamesListBox.Items.Refresh();
 
             //if (GamesListBox.SelectedIndex <= 0 && _selectedIndex > 0)
