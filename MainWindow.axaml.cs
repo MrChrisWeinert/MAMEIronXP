@@ -58,24 +58,9 @@ namespace MAMEIronXP
             //TODO: Make everything automatically scale, or perhaps have some pre-defined screen sizes, or maybe just throw values in the App.config
             //  None of these should be hard-coded values. However, the listbox must have a defined height otherwise the scrolling won't work properly.
             GamesListBox.CornerRadius = new Avalonia.CornerRadius(25);
-            GamesListBox.Height = 1100;
-            GamesListBox.Width = 1100;
-            GamesListBox.Margin = new Avalonia.Thickness(150);
-            //GamesListTextBox.FontSize = 48;
-            //TODO: Hide scrollbar
 
             this.PointerPressed += MainWindow_PointerPressed;
-            
-            //GamesListBox.Focus();
-            //GamesListBox.AttachedToVisualTree += (s, e) => GamesListBox.Focus();
-            //this.Focus();
-            //this.KeyDown += MainWindow_KeyDown;
         }
-
-        //private void MainWindow_KeyDown(object? sender, KeyEventArgs e)
-        //{
-        //    GamesListBox.Focus();
-        //}
 
         private void MainWindow_PointerPressed(object? sender, PointerPressedEventArgs e)
         {
