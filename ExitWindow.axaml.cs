@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using System.Collections.Generic;
 using System;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 
 namespace MAMEIronXP
 {
@@ -10,14 +11,8 @@ namespace MAMEIronXP
         public ExitWindow()
         {
             InitializeComponent();
-            //_exitWindowStartTime = DateTime.Now;
-            List<string> x = new List<string>();
-            x.Add("Exit to operating system");
-            x.Add("Reboot system");
-            x.Add("Shutdown system");
-            ExitListBox.ItemsSource = x;
+            ExitListBox.ItemsSource = new List<string>(["Exit to operating system", "Reboot system", "Shutdown system"]);
             ExitListBox.SelectedIndex = 0;
-            ExitListBox.Focus();
             ExitListBox.KeyDown += ExitListBox_KeyDown;
             this.PointerPressed += ExitWindow_PointerPressed;
         }
@@ -28,7 +23,20 @@ namespace MAMEIronXP
             {
                 case Key.D1:
                     e.Handled = true;
-                    Environment.Exit(1);
+                    switch (ExitListBox.SelectedIndex)
+                    {
+                        case 0:
+                            Environment.Exit(1);
+                            break;
+                        case 1:
+                            //Reboot
+                            //These are going to be a pain to get working cross-platform.
+                            break;
+                        case 2:
+                            //Shutdown
+                            //These are going to be a pain to get working cross-platform.
+                            break;
+                    }                    
                     break;
             }
         }
@@ -42,6 +50,10 @@ namespace MAMEIronXP
             {
                 this.Hide();
             }
+        }
+        private void ExitWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            ExitListBox.Focus();
         }
     }
 }
