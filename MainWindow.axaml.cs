@@ -286,18 +286,30 @@ namespace MAMEIronXP
             
             _games.Single(x => x.Name == ((Game)GamesListBox.SelectedItem).Name).ToggleFavorite();
             //PlaySound("pacman_cherry.wav");
-            //((Game)GamesListBox.SelectedItem).ToggleFavorite();
-            //_logger.LogInfo($"Just toggled {((Game)GamesListBox.SelectedItem).Name}. Favorite is now set to: {((Game)GamesListBox.SelectedItem).IsFavorite}");
             PersistGamesFile();
-
-            //GamesListBox.ItemsSource = GetUpdatedGameList();
-            //TODO: Rebind games to the ListBox so the change is displayed immediately
-            //GamesListBox.Items.Refresh();
+            RefreshGamesListBox();
 
             //if (GamesListBox.SelectedIndex <= 0 && _selectedIndex > 0)
             //{
             //    GamesListBox.SelectedIndex = _selectedIndex;
             //}
+        }
+        /// <summary>
+        /// Probably not the most efficient way to do this but it's fast enough.
+        /// </summary>
+        private void RefreshGamesListBox()
+        {
+            List<Game> favorites = _games.Where(g=> g.IsFavorite).OrderBy(g => g.Description).ToList();
+            List<Game> nonFavorites = _games.Where(g => !g.IsFavorite).OrderBy(g => g.Description).ToList();
+            _games.Clear();
+            foreach (var game in favorites)
+            {
+                _games.Add(game);
+            }
+            foreach (var game in nonFavorites)
+            {
+                _games.Add(game);
+            }
         }
     }
 }
