@@ -324,9 +324,8 @@ namespace MAMEIronXP
         /// </summary>
         private void RefreshGamesListBox()
         {
-            //Save the current selected index so we can restore it after we refresh the list. Might be off-by-one one way or the other...
-            int selectedIndex = GamesListBox.SelectedIndex;
-            int preRefreshGamesCount = _games.Count;
+            Game selectedGame = (Game)GamesListBox.SelectedItem;
+
             //We use a Hashset here because our "_games" collection has duplicates, and using a HashSet will ensure each game only gets added once
             HashSet<Game> favorites = _games.Where(g=> g.IsFavorite).OrderBy(g => g.Description).ToHashSet<Game>();
             HashSet<Game> allTheGames = _games.OrderBy(g => g.Description).ToHashSet<Game>();
@@ -339,24 +338,9 @@ namespace MAMEIronXP
             {
                 _games.Add(game);
             }
-            //Restore the selection so it doesn't look like things are jumping around.
-            if (GamesListBox.SelectedIndex <= 0 && selectedIndex > 0)
-            {
-                //Since we've modified the list by toggling a Favorite (we've either added a new favorite to the list, or removed one), our "selecftedIndex" variable will be off by one.
-                //We need to figure out if we should add/subtract 1
-                int offByOne;
-                //Sine we don't know if we toggled on vs. off we have to look at the count of our games list before/after                
-                if (preRefreshGamesCount < _games.Count)
-                {
-                    offByOne = 1;
-                }
-                else
-                {
-                    offByOne = -1;
-                }
-                GamesListBox.SelectedIndex = (selectedIndex + offByOne);
-                GamesListBox.Focus();
-            }
+            //Restore the SelectedItem back to whatever was selected before we refreshed the list.
+            GamesListBox.SelectedItem = selectedGame;
+            GamesListBox.Focus();
         }
     }
 }
