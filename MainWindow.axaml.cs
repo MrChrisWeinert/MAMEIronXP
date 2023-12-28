@@ -55,10 +55,6 @@ namespace MAMEIronXP
             GamesListBox.SelectionChanged += GamesListBox_SelectionChanged;
             GamesListBox.KeyDown += GamesListBox_KeyDown;
             GamesListBox.KeyUp += GamesListBox_KeyUp;
-            //TODO: Make everything automatically scale, or perhaps have some pre-defined screen sizes, or maybe just throw values in the App.config
-            //  None of these should be hard-coded values. However, the listbox must have a defined height otherwise the scrolling won't work properly.
-            GamesListBox.CornerRadius = new Avalonia.CornerRadius(25);
-
             PointerPressed += MainWindow_PointerPressed;
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -209,7 +205,7 @@ namespace MAMEIronXP
             {
                 subCategory = $"/{game.SubCategory}";
             }
-            GameMetadata.Text = $"Year: {game.Year}   Plays: {game.PlayCount}   Category: {game.Category}{subCategory}";
+            GameMetadata.Text = $"Year: {game.Year} Plays: {game.PlayCount} Category: {game.Category}{subCategory}";
         }
 
         private void LoadGamesFromJSON()
