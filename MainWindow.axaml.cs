@@ -209,7 +209,9 @@ namespace MAMEIronXP
                 {
                     _games.Add(game);
                 }
-                foreach (Game game in tempListOfGames.Where(y => y.IsFavorite == false).OrderBy(y => y.Description))
+                //Note: While we have favorites listed at the top, we *also* want those games to show up in their normal spot.
+                // So, yes, we will have duplicates in our list, and this is intentional.
+                foreach (Game game in tempListOfGames.OrderBy(y => y.Description))
                 {
                     _games.Add(game);
                 }
@@ -252,13 +254,23 @@ namespace MAMEIronXP
         }
         private void PersistGamesFile()
         {
+            //Our "ObservableCollection<Game> _games" will contain duplicates for any favorited game.
+            //We need to ensure we only persist each game once, so that's what this chunk of code does.
+            List<Game> games = new List<Game>();
+            foreach (Game game in _games)
+            {
+                if (!games.Contains(game))
+                {
+                    games.Add(game);
+                }
+            }
+
             using (StreamWriter sw = new StreamWriter(_gamesJson, false))
             {
-                string json = JsonConvert.SerializeObject(_games);
+                string json = JsonConvert.SerializeObject(games);
                 sw.WriteLine(json);
                 sw.Close();
             }
-            //_logger.LogInfo($"Games persisted to games.json.");
         }
         private void StartGame(Game game)
         {
@@ -283,32 +295,50 @@ namespace MAMEIronXP
         }
         private void ToggleFavorite()
         {
-            
-            _games.Single(x => x.Name == ((Game)GamesListBox.SelectedItem).Name).ToggleFavorite();
+            //Need to use First() not Single() here because a favorited game will exist in the list twice and .Single() will throw an exception
+            _games.First(x => x.Name == ((Game)GamesListBox.SelectedItem).Name).ToggleFavorite();
+
             //PlaySound("pacman_cherry.wav");
             PersistGamesFile();
             RefreshGamesListBox();
-
-            //if (GamesListBox.SelectedIndex <= 0 && _selectedIndex > 0)
-            //{
-            //    GamesListBox.SelectedIndex = _selectedIndex;
-            //}
         }
         /// <summary>
         /// Probably not the most efficient way to do this but it's fast enough.
         /// </summary>
         private void RefreshGamesListBox()
         {
-            List<Game> favorites = _games.Where(g=> g.IsFavorite).OrderBy(g => g.Description).ToList();
-            List<Game> nonFavorites = _games.Where(g => !g.IsFavorite).OrderBy(g => g.Description).ToList();
+            //Save the current selected index so we can restore it after we refresh the list. Might be off-by-one one way or the other...
+            int selectedIndex = GamesListBox.SelectedIndex;
+            int preRefreshGamesCount = _games.Count;
+            //We use a Hashset here because our "_games" collection has duplicates, and using a HashSet will ensure each game only gets added once
+            HashSet<Game> favorites = _games.Where(g=> g.IsFavorite).OrderBy(g => g.Description).ToHashSet<Game>();
+            HashSet<Game> allTheGames = _games.OrderBy(g => g.Description).ToHashSet<Game>();
             _games.Clear();
             foreach (var game in favorites)
             {
                 _games.Add(game);
             }
-            foreach (var game in nonFavorites)
+            foreach (var game in allTheGames)
             {
                 _games.Add(game);
+            }
+            //Restore the selection so it doesn't look like things are jumping around.
+            if (GamesListBox.SelectedIndex <= 0 && selectedIndex > 0)
+            {
+                //Since we've modified the list by toggling a Favorite (we've either added a new favorite to the list, or removed one), our "selecftedIndex" variable will be off by one.
+                //We need to figure out if we should add/subtract 1
+                int offByOne;
+                //Sine we don't know if we toggled on vs. off we have to look at the count of our games list before/after                
+                if (preRefreshGamesCount < _games.Count)
+                {
+                    offByOne = 1;
+                }
+                else
+                {
+                    offByOne = -1;
+                }
+                GamesListBox.SelectedIndex = (selectedIndex + offByOne);
+                GamesListBox.Focus();
             }
         }
     }
