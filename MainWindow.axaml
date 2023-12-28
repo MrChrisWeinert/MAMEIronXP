@@ -44,7 +44,7 @@
                   <StackPanel Orientation="Horizontal">
                     <Image IsVisible="{Binding IsFavorite}"  Width="50" Height="50" Source="avares://MAMEIronXP/Assets/MAMEIronXPFavorite.png" ></Image>
                     <Image IsVisible="{Binding !IsFavorite}" Width="50" Height="50" Source=""></Image>
-                    <TextBlock Text="{Binding Description}" FontFamily="Arcade" x:Name="GameTextBlock" FontSize="48" Height="35" />
+                    <TextBlock Text="{Binding Description}" FontFamily="Arcade" x:Name="GameTextBlock" FontSize="36" Height="35" />
                   </StackPanel>
                 </DataTemplate>
               </ListBox.ItemTemplate>

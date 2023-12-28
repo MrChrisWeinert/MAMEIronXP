@@ -209,7 +209,7 @@ namespace MAMEIronXP
             {
                 subCategory = $"/{game.SubCategory}";
             }
-            GameMetadata.Text = $"Year: {game.Year}   Plays: {game.PlayCount}   Category/Subcategory: {game.Category}{subCategory}";
+            GameMetadata.Text = $"Year: {game.Year}   Plays: {game.PlayCount}   Category: {game.Category}{subCategory}";
         }
 
         private void LoadGamesFromJSON()
