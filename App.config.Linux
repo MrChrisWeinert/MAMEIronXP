@@ -13,10 +13,6 @@
     <!-- For Linux the LogFile format should be something like this: "/home/myuser/MAME/MAMElogfile.log" -->
     <add key="LogFile" value="/home/ut/MAMESRC/mame0244/MAMElogfile.log"/>
 
-    <!-- For Windows the catverFile format should be something like this: "C:\MAME\catver.ini" -->
-    <!-- For Linux the catverFile format should be something like this: "/home/myuser/MAME/catver.ini" -->
-    <add key="catverFile" value="/home/ut/MAMESRC/mame0244/catver.ini"/>
-
     <!-- For Windows the SnapDirectory format should be something like this: "C:\MAME\snap" -->
     <!-- For Linux the SnapDirectory format should be something like this: "/home/myuser/MAME/snap" -->
     <add key="SnapDirectory" value="/home/ut/MAMESRC/mame0244/snap"/>
