@@ -26,7 +26,6 @@ namespace MAMEIronXP
         private string _mameArgs;
         private string _gamesJson;
         private string _logFile;
-        private string _romsDirectory;
         private Dictionary<string, Bitmap> _snapshots = new Dictionary<string, Bitmap>();
 
 
@@ -106,7 +105,6 @@ namespace MAMEIronXP
             _mameArgs = ConfigurationManager.AppSettings["MAME_Args"];
             _logFile = ConfigurationManager.AppSettings["LogFile"];
             _snapDirectory = ConfigurationManager.AppSettings["SnapDirectory"];
-            _romsDirectory = ConfigurationManager.AppSettings["RomsDirectory"];
             _gamesJson = Path.Combine(_MAMEDirectory, "games.json");
             _logger = new Logger(_logFile);
 
@@ -133,7 +131,7 @@ namespace MAMEIronXP
                 errorText = $"Error: {_mameExe} was not found.";
                 Console.WriteLine(errorText);
                 Console.WriteLine("1) Ensure all prerequisite are met (https://github.com/MrChrisWeinert/MAMEIronXP#prerequisites)");
-                Console.WriteLine("2) Check the MAMEDirectory setting in the App.config to make sure you're pointed at your MAME executable.");
+                Console.WriteLine("2) Check the MAMEDirectory and MAMEExecutable settings in the App.config to make sure you're pointed at your MAME executable.");
                 _logger.LogInfo(errorText);
                 Environment.Exit(1);
             }
@@ -141,7 +139,7 @@ namespace MAMEIronXP
             {
                 errorText = $"Error: {_snapDirectory} was not found.";
                 Console.WriteLine("1) Ensure all prerequisite are met (https://github.com/MrChrisWeinert/MAMEIronXP#prerequisites)");
-                Console.WriteLine("2) Verify that your MAMEDirectory setting in the App.config is correct and that your roms directory exists that directory.");
+                Console.WriteLine("2) Verify that your SnapDirectory setting in the App.config is correct.");
                 Console.WriteLine(errorText);
                 _logger.LogInfo(errorText);
                 Environment.Exit(1);

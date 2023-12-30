@@ -17,10 +17,6 @@
     <!-- For Linux the SnapDirectory format should be something like this: "/home/myuser/MAME/snap" -->
     <add key="SnapDirectory" value="/home/ut/MAMESRC/mame0244/snap"/>
 
-    <!-- For Windows the RomsDirectory format should be something like this: "C:\MAME\roms" -->
-    <!-- For Linux the RomsDirectory format should be something like this: "/home/myuser/MAME/roms" -->
-    <add key="RomsDirectory" value="/home/ut/MAMESRC/mame0244/roms"/>
-
     <add key="MAME_Args" value="-autosave -skip_gameinfo -video bgfx"/>
     
   </appSettings>
