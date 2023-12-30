@@ -18,8 +18,6 @@ Ideally it will scale across different sized-screens, and function the same acro
 - Roms
   - You should have a "roms" folder in your root MAME directory, with all zip files inside like this: C:\MAME\roms\mspacman.zip (Windows) or /home/username/MAME/roms/mspacman.zip (Linux)
   - Tested with version .244 (merged)
-- Fonts
-  - In the /Assets folder there are two fonts, Arcade and Pac-font. You'll want to install both of those or else things will look janky.
 
 ## Where did this name come from?
 MAME = **M**ultiple **A**rcade **M**achine **E**mulator
