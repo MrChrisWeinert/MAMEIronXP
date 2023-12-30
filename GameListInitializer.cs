@@ -16,17 +16,15 @@ namespace MAMEIronXP
         private string _mameExe;
         private string _listFull;
         private string _snapsDir;
-        private string _catver;
         private List<Game> _games = new List<Game>();
         private Dictionary<string, string> _categories = new Dictionary<string, string>();
         private List<string> _killList = new List<string>();
 
-        public List<Game> GenerateGameList(string MAMEDirectory, string mameExe, string snapDir, string catver)
+        public List<Game> GenerateGameList(string MAMEDirectory, string mameExe, string snapDir)
         {
             _MAMEDirectory = MAMEDirectory;
             _mameExe = mameExe;
             _snapsDir = snapDir;
-            _catver = catver;
             _listFull = Path.Combine(_MAMEDirectory, "list.xml");
             if (!File.Exists(_listFull))
             {
@@ -80,7 +78,7 @@ namespace MAMEIronXP
         /// </summary>
         private void LoadCategories()
         {
-            using (StreamReader sr = new StreamReader(_catver))
+            using (StreamReader sr = new StreamReader("/Assets/catver.ini"))
             {
                 string line = sr.ReadLine();
                 while (line != null)

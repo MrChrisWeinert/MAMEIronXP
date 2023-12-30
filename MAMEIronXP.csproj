@@ -24,6 +24,9 @@
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
    </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Remove="Assets\catver.ini" />
+  </ItemGroup>
    <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.6" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.6" />
@@ -33,5 +36,10 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
+   </ItemGroup>
+   <ItemGroup>
+     <None Update="Assets\catver.ini">
+       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+     </None>
    </ItemGroup>
 </Project>

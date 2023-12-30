@@ -26,7 +26,6 @@ namespace MAMEIronXP
         private string _mameArgs;
         private string _gamesJson;
         private string _logFile;
-        private string _catver;
         private string _romsDirectory;
         private Dictionary<string, Bitmap> _snapshots = new Dictionary<string, Bitmap>();
 
@@ -106,7 +105,6 @@ namespace MAMEIronXP
             _mameExe = Path.Combine(_MAMEDirectory, ConfigurationManager.AppSettings["MAMEExecutable"]);
             _mameArgs = ConfigurationManager.AppSettings["MAME_Args"];
             _logFile = ConfigurationManager.AppSettings["LogFile"];
-            _catver = ConfigurationManager.AppSettings["catverFile"];
             _snapDirectory = ConfigurationManager.AppSettings["SnapDirectory"];
             _romsDirectory = ConfigurationManager.AppSettings["RomsDirectory"];
             _gamesJson = Path.Combine(_MAMEDirectory, "games.json");
@@ -139,15 +137,6 @@ namespace MAMEIronXP
                 _logger.LogInfo(errorText);
                 Environment.Exit(1);
             }
-            else if (!File.Exists(_catver))
-            {
-                errorText = $"Error: {_catver} was not found.";
-                Console.WriteLine("1) Ensure all prerequisite are met (https://github.com/MrChrisWeinert/MAMEIronXP#prerequisites)");
-                Console.WriteLine("2) Verify that your MAMEDirectory setting in the App.config is correct and that catver.ini exists in that directory.");
-                Console.WriteLine(errorText);
-                _logger.LogInfo(errorText);
-                Environment.Exit(1);
-            }
             else if (!Directory.Exists(_snapDirectory))
             {
                 errorText = $"Error: {_snapDirectory} was not found.";
@@ -162,7 +151,7 @@ namespace MAMEIronXP
                 //INFO: games.json is a file that MAMEIronXP generates once (and only once). It is the main working file that MAMEIronXP subsequently uses to load games and is also where a game's PlayCount is tracked as well as its "Favorite" status.
                 //      This file is periodically persisted back to disk if there are changes (i.e. a game is marked as a Favorite or it's Play Count is incremented).
                 GameListInitializer gameListInitializer = new GameListInitializer();
-                foreach (Game game in gameListInitializer.GenerateGameList(_MAMEDirectory, _mameExe, _snapDirectory, _catver).OrderBy(x => x.Description))
+                foreach (Game game in gameListInitializer.GenerateGameList(_MAMEDirectory, _mameExe, _snapDirectory).OrderBy(x => x.Description))
                 {
                     _games.Add(game);
                 }
