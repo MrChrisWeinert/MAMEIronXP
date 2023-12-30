@@ -26,6 +26,8 @@
    </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Remove="Assets\catver.ini" />
+    <AvaloniaResource Remove="Assets\MAMEIronXPCabinetV3.afphoto" />
+    <AvaloniaResource Remove="Assets\MAMEIronXPFavorite.afphoto" />
   </ItemGroup>
    <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.6" />
