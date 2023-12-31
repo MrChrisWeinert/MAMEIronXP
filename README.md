@@ -4,7 +4,7 @@ MAMEIronXP is a cross-platform MAME front-end built in C#/AvaloniaUI.
 This is a Work In Progress in the beginning stages of development.
 Ideally it will scale across different sized-screens, and function the same across operating systems.
 
-![screenshot](https://github.com/MrChrisWeinert/MAMEIronXP/blob/main/Assets/animation.gif?raw=true)
+![screenshot](https://github.com/MrChrisWeinert/MAMEIronXP/blob/main/Assets/Animation.gif?raw=true)
 
 # Getting Started
 ## Windows
