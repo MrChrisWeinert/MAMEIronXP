@@ -13,6 +13,7 @@
   <ItemGroup>
     <None Remove=".gitignore" />
     <None Remove="Assets\MAMEIronXPCabinet2.afphoto" />
+    <None Remove="Assets\Screenshot.jpg" />
   </ItemGroup>
   <ItemGroup>
     <!--This helps with theme dll-s trimming.
@@ -28,6 +29,7 @@
     <AvaloniaResource Remove="Assets\catver.ini" />
     <AvaloniaResource Remove="Assets\MAMEIronXPCabinetV3.afphoto" />
     <AvaloniaResource Remove="Assets\MAMEIronXPFavorite.afphoto" />
+    <AvaloniaResource Remove="Assets\Screenshot.jpg" />
   </ItemGroup>
    <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.6" />
