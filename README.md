@@ -10,7 +10,7 @@ Ideally it will scale across different sized-screens, and function the same acro
 ## Windows
 1) Download the MAME binary and extract it to a directory of your choice (e.g. C:\MAME). You'll want to download a version of MAME that matches the version of your roms. I'm using version .258
 https://github.com/mamedev/mame/releases/download/mame0258/mame0258b_64bit.exe
-2) Download a full set of Snapshots and extract them to your MAME "snap" directory (e.g. C:\MAME\snap). https://www.progettosnaps.net/snapshots/
+2) Download a full set of Snapshots and extract them (just the .png files) to your MAME "snap" directory (e.g. C:\MAME\snap). https://www.progettosnaps.net/snapshots/
 3) Download & install .net 8: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
 4) Download MAMEIronXP and extract it to a directory of your choice (e.g. C:\MAMEIronXP).
 5) Edit the App.config file and tell it where you extracted MAME.
@@ -27,12 +27,15 @@ In short, change to your ~/MAME directory and run the following commands:
 
   If everything goes well, you'll have a working "mame" executable
 
-3) Download a full set of Snapshots and extract them to your MAME "snap" directory (e.g. C:\MAME\snap). https://www.progettosnaps.net/snapshots/
+3) Download a full set of Snapshots and extract them (just the .png files) to your MAME "snap" directory (e.g. C:\MAME\snap). https://www.progettosnaps.net/snapshots/
 4) Install .net 8
 
 ```sudo apt update && sudo snap install dotnet-sdk --classic```
 
 5) Download MAMEIronXP and extract it to a directory of your choice (e.g. ~/MAMEIronXP)
+
+```git clone https://github.com/MrChrisWeinert/MAMEIronXP.git```
+
 6) Overwrite the default "App.config" file with a version suitable for Linux: ```cp App.config.Linux App.config```
 7) Edit the new App.config file and tell it where you extracted MAME.
 8) To run MAMEIronXP, open a terminal and navigate to your MAMEIronXP directory (~/MAMEIronXP). Type: ```dotnet run```
