@@ -7,6 +7,8 @@ using System.Xml;
 using System.Diagnostics;
 using MAMEIronXP.Models;
 using Avalonia.Utilities;
+using System.Reflection;
+using System;
 
 namespace MAMEIronXP
 {
@@ -78,7 +80,7 @@ namespace MAMEIronXP
         /// </summary>
         private void LoadCategories()
         {
-            using (StreamReader sr = new StreamReader("/Assets/catver.ini"))
+            using (StreamReader sr = new StreamReader(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Assets", "catver.ini")))
             {
                 string line = sr.ReadLine();
                 while (line != null)
