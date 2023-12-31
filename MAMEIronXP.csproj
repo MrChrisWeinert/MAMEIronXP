@@ -12,6 +12,7 @@
    </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
+    <None Remove="Assets\Animation.gif" />
     <None Remove="Assets\MAMEIronXPCabinet2.afphoto" />
     <None Remove="Assets\Screenshot.jpg" />
   </ItemGroup>
@@ -26,6 +27,7 @@
     <AvaloniaResource Include="Assets\**" />
    </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Remove="Assets\Animation.gif" />
     <AvaloniaResource Remove="Assets\catver.ini" />
     <AvaloniaResource Remove="Assets\MAMEIronXPCabinetV3.afphoto" />
     <AvaloniaResource Remove="Assets\MAMEIronXPFavorite.afphoto" />
