@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia;
 
 namespace MAMEIronXP
 {
@@ -30,11 +31,25 @@ namespace MAMEIronXP
                             break;
                         case 1:
                             //Reboot
-                            //These are going to be a pain to get working cross-platform.
+                            if (OperatingSystem.IsWindows())
+                            {
+                                System.Diagnostics.Process.Start("shutdown.exe", "/r /t 0");
+                            }
+                            else
+                            {
+                                //TODO: Implement shutdown for other operating systems
+                            }
                             break;
                         case 2:
                             //Shutdown
-                            //These are going to be a pain to get working cross-platform.
+                            if (OperatingSystem.IsWindows())
+                            {
+                                System.Diagnostics.Process.Start("shutdown.exe", "/s /t 0");   
+                            }
+                            else
+                            {
+                                //TODO: Implement shutdown for other operating systems
+                            }
                             break;
                     }                    
                     break;
