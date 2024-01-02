@@ -45,6 +45,15 @@ namespace MAMEIronXP
 
         public MainWindow()
         {
+            //Initialize all our private variables
+            _MAMEDirectory = ConfigurationManager.AppSettings["MAMEDirectory"];
+            _mameExe = Path.Combine(_MAMEDirectory, ConfigurationManager.AppSettings["MAMEExecutable"]);
+            _mameArgs = ConfigurationManager.AppSettings["MAME_Args"];
+            _logFile = ConfigurationManager.AppSettings["LogFile"];
+            _snapDirectory = ConfigurationManager.AppSettings["SnapDirectory"];
+            _gamesJson = Path.Combine(_MAMEDirectory, "games.json");
+            _logger = new Logger(_logFile);
+
             InitializeComponent();
             PrepareForLaunch();
             GamesListBox.ItemsSource = _games;
@@ -109,16 +118,6 @@ namespace MAMEIronXP
 
         private void PrepareForLaunch()
         {
-            //Initialize all our private variables
-            _MAMEDirectory = ConfigurationManager.AppSettings["MAMEDirectory"];
-            _mameExe = Path.Combine(_MAMEDirectory, ConfigurationManager.AppSettings["MAMEExecutable"]);
-            _mameArgs = ConfigurationManager.AppSettings["MAME_Args"];
-            _logFile = ConfigurationManager.AppSettings["LogFile"];
-            _snapDirectory = ConfigurationManager.AppSettings["SnapDirectory"];
-            _gamesJson = Path.Combine(_MAMEDirectory, "games.json");
-            _logger = new Logger(_logFile);
-
-
             //Check prerequisites and generate games.json if it doesn't exist
             string errorText;
             if (!File.Exists(_logFile))
@@ -128,7 +127,7 @@ namespace MAMEIronXP
                 {
                     File.Create(_logFile);
                 }
-                catch (Exception ex)
+                catch
                 {
                     errorText = $"Error: Unable to create log file here: {_logFile}";
                     Console.WriteLine(errorText);
@@ -158,8 +157,8 @@ namespace MAMEIronXP
             {
                 //INFO: games.json is a file that MAMEIronXP generates once (and only once). It is the main working file that MAMEIronXP subsequently uses to load games and is also where a game's PlayCount is tracked as well as its "Favorite" status.
                 //      This file is periodically persisted back to disk if there are changes (i.e. a game is marked as a Favorite or it's Play Count is incremented).
-                GameListInitializer gameListInitializer = new GameListInitializer();
-                foreach (Game game in gameListInitializer.GenerateGameList(_MAMEDirectory, _mameExe, _snapDirectory).OrderBy(x => x.Description))
+                GameListInitializer gameListInitializer = new GameListInitializer(_MAMEDirectory, _mameExe, _snapDirectory);
+                foreach (Game game in gameListInitializer.GenerateGameList().OrderBy(x => x.Description))
                 {
                     _games.Add(game);
                 }

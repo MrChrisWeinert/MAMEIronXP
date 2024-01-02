@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,13 +21,15 @@ namespace MAMEIronXP
         private List<Game> _games = new List<Game>();
         private Dictionary<string, string> _categories = new Dictionary<string, string>();
         private List<string> _killList = new List<string>();
-
-        public List<Game> GenerateGameList(string MAMEDirectory, string mameExe, string snapDir)
+        public GameListInitializer(string MAMEDirectory, string mameExe, string snapDir)
         {
             _MAMEDirectory = MAMEDirectory;
             _mameExe = mameExe;
             _snapsDir = snapDir;
             _listFull = Path.Combine(_MAMEDirectory, "list.xml");
+        }
+        public List<Game> GenerateGameList()
+        {
             if (!File.Exists(_listFull))
             {
                 GenerateGamesXML();
@@ -82,7 +84,7 @@ namespace MAMEIronXP
         {
             using (StreamReader sr = new StreamReader(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Assets", "catver.ini")))
             {
-                string line = sr.ReadLine();
+                string? line = sr.ReadLine();
                 while (line != null)
                 {
                     //We're looking for Category lines which are structured like this: "mspacman=Maze / Collect"
@@ -103,7 +105,7 @@ namespace MAMEIronXP
             XmlDocument doc = new XmlDocument();
             //Perf note: The list.xml file is roughly 263B (version .244). Loading this into memory uses ~2GB of RAM.
             doc.Load(_listFull);
-            XmlNode root = doc.SelectSingleNode("mame");
+            XmlNode? root = doc.SelectSingleNode("mame");
             
             foreach (XmlNode node in root.SelectNodes("machine"))
             {
@@ -256,7 +258,7 @@ namespace MAMEIronXP
             {
                 stream.Seek(0, SeekOrigin.Begin);
 
-                MD5 md5 = MD5CryptoServiceProvider.Create();
+                MD5 md5 = MD5.Create();
                 byte[] hash = md5.ComputeHash(stream);
                 foreach (byte b in hash)
                     sb.Append(b.ToString("x2"));

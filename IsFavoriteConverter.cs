@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Avalonia.Data.Converters;
 using System.Globalization;
 
@@ -8,7 +8,7 @@ namespace MAMEIronXP
     {
         public static readonly IsFavoriteConverter Instance = new();
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is bool boolValue)
             {

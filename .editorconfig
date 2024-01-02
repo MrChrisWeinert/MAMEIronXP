@@ -1,4 +1,6 @@
 ﻿[*.cs]
+# CS8600: CS8600: Converting null literal or possible null value to non-nullable type.
+dotnet_diagnostic.CS8600.severity = none
 
 # CS8601: Possible null reference assignment.
 dotnet_diagnostic.CS8601.severity = none
@@ -21,8 +23,21 @@ csharp_style_expression_bodied_local_functions = false:silent
 csharp_style_throw_expression = true:suggestion
 csharp_style_prefer_null_check_over_type_check = true:suggestion
 
+# CS8602: Dereference of a possibly null reference
+dotnet_diagnostic.CS8602.severity = none
+
 # CS8604: Possible null reference argument.
 dotnet_diagnostic.CS8604.severity = none
+
+# CS8618: Non-nullable field <fieldname> must contain a non-null value when exiting constructor.
+dotnet_diagnostic.CS8618.severity = none
+
+# CS8622: Nullability of reference types in type of parameter 'sender'
+dotnet_diagnostic.CS8622.severity = none
+
+# CS8767: Nullability of reference types in type of parameter 'value' of 'object
+dotnet_diagnostic.CS8767.severity =none
+
 
 [*.{cs,vb}]
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
