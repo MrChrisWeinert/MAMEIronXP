@@ -85,7 +85,7 @@ namespace MAMEIronXP
                 case Key.C:
                     e.Handled = true;
                     ToggleFavorite();
-                break;
+                    break;
                 case Key.D1:
                     e.Handled = true;
                     var listBox = (ListBox)sender;
@@ -93,11 +93,17 @@ namespace MAMEIronXP
                     {
                         StartGame(game);
                     }                        
-                break;
+                    break;
+                case Key.D3:
+                    //volume Down
+                    break;
+                case Key.D4:
+                    //volume Up
+                    break;
                 case Key.Escape:
                     ExitWindow exitWindow = new ExitWindow();
                     exitWindow.Show();
-                break;
+                    break;
             }
         }
 
