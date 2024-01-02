@@ -53,6 +53,9 @@ namespace MAMEIronXP
                             break;
                     }                    
                     break;
+                case Key.Escape:
+                    this.Hide();
+                    break;
             }
         }
 
