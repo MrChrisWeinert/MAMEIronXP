@@ -94,6 +94,10 @@ namespace MAMEIronXP
                         StartGame(game);
                     }                        
                 break;
+                case Key.Escape:
+                    ExitWindow exitWindow = new ExitWindow();
+                    exitWindow.Show();
+                break;
             }
         }
 
