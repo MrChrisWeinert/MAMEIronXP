@@ -13,7 +13,7 @@
         HorizontalAlignment="Center"
         VerticalAlignment="Center"
         Loaded="ExitWindow_Loaded">
-  <ListBox x:Name="ExitListBox" Width="420" Height="175" Focusable="True" CornerRadius="5"  Opacity="100" FontFamily="avares://MAMEIronXP/Assets/Arcade.ttf#" >
+  <ListBox x:Name="ExitListBox" Width="425" Height="175" Focusable="True" CornerRadius="5"  Opacity="100" FontFamily="avares://MAMEIronXP/Assets/Arcade.ttf#" >
     <ListBox.ItemTemplate>
       <DataTemplate>
         <StackPanel Orientation="Vertical">
