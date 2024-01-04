@@ -26,11 +26,11 @@
       <Panel ZIndex="30" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
         <Image Source="avares://MAMEIronXP/Assets/MAMEIronXPCabinetV3.png"  />
       </Panel>
-      <Panel ZIndex="20" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="550,350,0,0" >
-          <Image Name="GameSnapshot" Width="400"/>
+      <Panel ZIndex="20" Name="GameSnapshotPanel" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" >
+          <Image Name="GameSnapshot" />
       </Panel>
-      <Panel ZIndex="40" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="460,810,0,0">
-        <TextBox x:Name="GameMetadata"  FontSize="22" Focusable="False" Width="580" Background="YellowGreen" FontFamily="avares://MAMEIronXP/Assets/Arcade.ttf#" Opacity="50"></TextBox>
+      <Panel ZIndex="40" Name="GameMetadataPanel" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" >
+        <TextBox x:Name="GameMetadata" Focusable="False" Background="YellowGreen" FontFamily="avares://MAMEIronXP/Assets/Arcade.ttf#" Opacity="50"></TextBox>
       </Panel>
       <Panel ZIndex="40" Grid.Row="0" Grid.Column="1">
         <Grid ShowGridLines="false" ColumnDefinitions="*,*,*,*,*,*,*,*,*,*" RowDefinitions="*,*,*,*,*,*,*,*,*,*">
@@ -38,7 +38,7 @@
             <Image Source="avares://MAMEIronXP/Assets/MAMEIronXPTitle.png" />
           </Panel>
           <Panel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="8" Grid.RowSpan="8">
-            <ListBox x:Name="GamesListBox" ScrollViewer.VerticalScrollBarVisibility="Hidden" Focusable="True" CornerRadius="25" >
+            <ListBox x:Name="GamesListBox" ScrollViewer.VerticalScrollBarVisibility="Hidden" Focusable="True" >
               <ListBox.ItemTemplate>
                 <DataTemplate>
                   <StackPanel Orientation="Horizontal">
