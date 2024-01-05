@@ -11,11 +11,12 @@ Ideally it will scale across different sized-screens, and function the same acro
 1) Download the MAME binary and extract it to a directory of your choice (e.g. C:\MAME). You'll want to download a version of MAME that matches the version of your roms. I'm using version .258
 https://github.com/mamedev/mame/releases/download/mame0258/mame0258b_64bit.exe
 2) Download a full set of Snapshots and extract them (just the .png files) to your MAME "snap" directory (e.g. C:\MAME\snap). https://www.progettosnaps.net/snapshots/
-3) Download & install .net 8: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+3) Download & install .NET 8: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
 4) Download MAMEIronXP and extract it to a directory of your choice (e.g. C:\MAMEIronXP).
 5) Edit the App.config file and tell it where you extracted MAME.
 6) To run MAMEIronXP, open a command prompt/terminal and navigate to your MAMEIronXP directory (C:\MAMEIronXP). Type: ```dotnet run```
-## Ubuntu
+## Ubuntu**
+**.NET 8 is a pain to install on older Ubuntu distributions because .NET 8 isn't in Ubuntu's package management system (apt). The "snap" install is quirky and doesn't install all the necessary dependencies. Therefore I'd recommend using Ubuntu 23.10 that version *does* include .NET 8 in the apt repositories.
 1) Download the MAME source code and extract it to a directory of your choice (e.g. ~/MAME). You'll want to use a version of MAME that matches the version of your roms. I'm using version .258
 https://github.com/mamedev/mame/archive/refs/tags/mame0258.zip
 2) Compile MAME. Follow the directions here: https://docs.mamedev.org/initialsetup/compilingmame.html 
@@ -28,9 +29,9 @@ In short, change to your ~/MAME directory and run the following commands:
   If everything goes well, you'll have a working "mame" executable
 
 3) Download a full set of Snapshots and extract them (just the .png files) to your MAME "snap" directory (e.g. C:\MAME\snap). https://www.progettosnaps.net/snapshots/
-4) Install .net 8
+4) Install .NET 8
 
-```sudo apt update && sudo snap install dotnet-sdk --classic```
+```sudo apt update && sudo apt install dotnet-sdk-8.0```
 
 5) Download MAMEIronXP and extract it to a directory of your choice (e.g. ~/MAMEIronXP)
 
