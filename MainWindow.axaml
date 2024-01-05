@@ -37,7 +37,7 @@
           <Panel HorizontalAlignment="Left" VerticalAlignment="Top"  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="8">
             <Image Source="avares://MAMEIronXP/Assets/MAMEIronXPTitle.png" />
           </Panel>
-          <Panel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="8" Grid.RowSpan="8">
+          <Panel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="8" Grid.RowSpan="9">
             <ListBox x:Name="GamesListBox" ScrollViewer.VerticalScrollBarVisibility="Hidden" Focusable="True" >
               <ListBox.ItemTemplate>
                 <DataTemplate>
