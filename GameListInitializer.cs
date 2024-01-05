@@ -32,7 +32,9 @@ namespace MAMEIronXP
         {
             if (!File.Exists(_listFull))
             {
+                Console.WriteLine("Generating list of games that MAME supports. This is a 1-time task and may take a minute or two depending on your system's speed...");
                 GenerateGamesXML();
+                Console.WriteLine("Finished generating list of games that MAME supports.");
             }
             LoadCategories();
             ParseXMLAndFilter();

@@ -90,7 +90,7 @@ namespace MAMEIronXP
                     //ImageIsFavorite.Height = 50;
                     //ImageIsNotFavorite.Width = 50;
                     //ImageIsNotFavorite.Height = 50;
-                    GamesListBox.Margin = new Thickness(0,0,0,windowSize.Height/20);                    
+                    GamesListBox.Margin = new Thickness(0,0,0,windowSize.Height/20);
                 }
                 else if (windowSize.Width == 1920 && windowSize.Height == 1080)
                 {
