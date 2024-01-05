@@ -155,12 +155,6 @@ namespace MAMEIronXP
                         StartGame(game);
                     }                        
                     break;
-                case Key.D3:
-                    //volume Down
-                    break;
-                case Key.D4:
-                    //volume Up
-                    break;
                 case Key.Escape:
                     ExitWindow exitWindow = new ExitWindow();
                     exitWindow.Show();
