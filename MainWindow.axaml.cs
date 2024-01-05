@@ -179,7 +179,7 @@ namespace MAMEIronXP
             {
                 errorText = $"Error: {_mameExe} was not found.";
                 Console.WriteLine(errorText);
-                Console.WriteLine("1) Ensure all prerequisite are met (https://github.com/MrChrisWeinert/MAMEIronXP#prerequisites)");
+                Console.WriteLine("1) Check out the Getting Started section of the README (https://github.com/MrChrisWeinert/MAMEIronXP#getting-started)");
                 Console.WriteLine("2) Check the MAMEDirectory and MAMEExecutable settings in the App.config to make sure you're pointed at your MAME executable.");
                 _logger.LogInfo(errorText);
                 Environment.Exit(1);
@@ -187,7 +187,7 @@ namespace MAMEIronXP
             else if (!Directory.Exists(_snapDirectory))
             {
                 errorText = $"Error: {_snapDirectory} was not found.";
-                Console.WriteLine("1) Ensure all prerequisite are met (https://github.com/MrChrisWeinert/MAMEIronXP#prerequisites)");
+                Console.WriteLine("1) Check out the Getting Started section of the README (https://github.com/MrChrisWeinert/MAMEIronXP#getting-started)");
                 Console.WriteLine("2) Verify that your SnapDirectory setting in the App.config is correct.");
                 Console.WriteLine(errorText);
                 _logger.LogInfo(errorText);
