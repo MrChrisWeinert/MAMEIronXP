@@ -129,6 +129,7 @@ namespace MAMEIronXP
             //The Tankstick's "exit" button at the top right is mapped to a Middle Mouse-click.
             if (x.IsMiddleButtonPressed)
             {
+                e.Handled = true;
                 ExitWindow exitWindow = new ExitWindow();
                 exitWindow.Show();
             }
