@@ -14,7 +14,8 @@ https://github.com/mamedev/mame/releases/download/mame0258/mame0258b_64bit.exe
 3) Download & install .NET 8: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
 4) Download MAMEIronXP and extract it to a directory of your choice (e.g. C:\MAMEIronXP).
 5) Edit the App.config file and tell it where you extracted MAME.
-6) To run MAMEIronXP, open a command prompt/terminal and navigate to your MAMEIronXP directory (C:\MAMEIronXP). Type: ```dotnet run```
+6) To build MAMEIronXP, open a command prompt/terminal and navigate to your MAMEIronXP directory (C:\MAMEIronXP). Type: ```dotnet build```
+7) To run MAMEIronXP, navigate to the output directory (C:\MAMEIronXP\bin\Debug\net8.0) and double-click one MAMEIronXP executable, or at a command prompt/terminal type: ```dotnet run```
 ## Ubuntu**
 **.NET 8 is a pain to install on older Ubuntu distributions because .NET 8 isn't in Ubuntu's package management system (apt). The "snap" install is quirky and doesn't install all the necessary dependencies. Therefore I'd recommend using Ubuntu 23.10 that version *does* include .NET 8 in the apt repositories.
 1) Download the MAME source code and extract it to a directory of your choice (e.g. ~/MAME). You'll want to use a version of MAME that matches the version of your roms. I'm using version .258
@@ -39,7 +40,8 @@ In short, change to your ~/MAME directory and run the following commands:
 
 6) Overwrite the default "App.config" file with a version suitable for Linux: ```cp App.config.Linux App.config```
 7) Edit the new App.config file and tell it where you extracted MAME.
-8) To run MAMEIronXP, open a terminal and navigate to your MAMEIronXP directory (~/MAMEIronXP). Type: ```dotnet run```
+8) To build MAMEIronXP, open a terminal and navigate to your MAMEIronXP directory (~/MAMEIronXP). Type: ```dotnet build```
+9) To run MAMEIronXP after building, you run it like any other executable ```~/MAMEIronXP/bin/Debut/net8.0/MAMEIronXP```
 
 # Where did this name come from?
 MAME = **M**ultiple **A**rcade **M**achine **E**mulator
