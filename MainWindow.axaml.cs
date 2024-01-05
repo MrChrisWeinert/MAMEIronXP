@@ -104,7 +104,17 @@ namespace MAMEIronXP
                     GamesListBox.CornerRadius = new CornerRadius(15);
                     GamesListBox.Margin = new Thickness(0,0,0,windowSize.Height/20);
                 }
+                else if (windowSize.Width == 1600 && windowSize.Height == 900)
+                {
+                    GameSnapshotPanel.Margin = new Thickness(345, 220, 0, 0);
+                    GameSnapshot.Width = 250;
+                    GameMetadataPanel.Margin = new Thickness(285, 500, 0, 0);
+                    GameMetadata.Width = 365;
+                    GameMetadata.FontSize = 14;
+                    GameMetadata.Padding = new Thickness(10, 10, 6, 5);
+                    GamesListBox.CornerRadius = new CornerRadius(15);
                     GamesListBox.Margin = new Thickness(0,0,0,windowSize.Height/20);
+                }
             }
         }
         /// <summary>
