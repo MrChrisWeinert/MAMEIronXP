@@ -347,6 +347,8 @@ namespace MAMEIronXP
             {
                 game.IncrementPlayCount();
                 PersistGamesFile();
+                //Update the metadata textbox with the updated playcount
+                DisplayMetadata(game);
             }
             else
             {
