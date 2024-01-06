@@ -46,6 +46,6 @@ In short, change to your ~/MAME directory and run the following commands:
 # Where did this name come from?
 MAME = **M**ultiple **A**rcade **M**achine **E**mulator
 
-Iron = This is a MAME **F**ront-**E**nd ("**Fe**") and Fe is the checmical elemental symbol for Iron.
+Iron = This is a MAME **F**ront-**E**nd ("**Fe**") and Fe is the chemical elemental symbol for Iron.
 
 XP = **X**-**P**latform, or cross-platform
