@@ -11,7 +11,7 @@ Ideally it will scale across different sized-screens, and function the same acro
 1) Download the MAME binary and extract it to a directory of your choice (e.g. C:\MAME). You'll want to download a version of MAME that matches the version of your roms. I'm using version .258
 https://github.com/mamedev/mame/releases/download/mame0258/mame0258b_64bit.exe
 2) Download a full set of Snapshots and extract them (just the .png files) to your MAME "snap" directory (e.g. C:\MAME\snap). https://www.progettosnaps.net/snapshots/
-3) Download & install .NET 8: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+3) Download & install the .NET 8 SDK (not runtime): https://dotnet.microsoft.com/en-us/download/dotnet/8.0
 4) Download MAMEIronXP and extract it to a directory of your choice (e.g. C:\MAMEIronXP).
 5) Edit the App.config file and tell it where you extracted MAME.
 6) To build MAMEIronXP, open a command prompt/terminal and navigate to your MAMEIronXP directory (C:\MAMEIronXP). Type: ```dotnet build```
