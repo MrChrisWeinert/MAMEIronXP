@@ -43,6 +43,34 @@ In short, change to your ~/MAME directory and run the following commands:
 8) To build MAMEIronXP, open a terminal and navigate to your MAMEIronXP directory (~/MAMEIronXP). Type: ```dotnet build```
 9) To run MAMEIronXP after building, you run it like any other executable ```~/MAMEIronXP/bin/Debut/net8.0/MAMEIronXP```
 
+# Running MAMEIronXP
+"C" on the keyboard will mark a game as a Favorite and a little Pac-Man icon will show up to the left of a game. The game will show up at the top of the Games list so it's easily accessible. The game will still show up in the list in alphabetic order. Pressing C again will unfavorite a game.
+_TODO_: make this into a long-press to prevent accidental favorite/unfavorites.
+
+"1" on the keyboard will make a selection (start a game, or make a selection on the Exit menu)
+
+"ESC" on the keyboard will bring up the Exit menu. Pressing it again will exit out of the Exit menu.
+
+"Up/Down" on the keyboard will scroll the games list.
+_TODO_: Implement "acceleration" so you can navigate the list VERY fast when holding down the Up/Down button.
+
+
+
+## Known Issues
+[Currently limited]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/7)) to the following resolutions with more on the way:
+- 2560x1440
+- 1920x1080
+- 1600x900
+
+There is a [bug]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/11)) where sometimes the games list will show duplicates. Should be resolved soon.
+
+Dark theme on Ubuntu (and maybe Windows?) will [make the game list hard to read]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/8)). This will be resolved soon.
+
+Games list items have a [fixed font size and Favorite icon size]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/7)). 
+## Tips
+
+
+
 # Where did this name come from?
 MAME = **M**ultiple **A**rcade **M**achine **E**mulator
 
