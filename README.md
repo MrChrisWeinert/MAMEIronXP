@@ -62,7 +62,6 @@ _TODO_: Implement "acceleration" so you can navigate the list VERY fast when hol
 - 1920x1080
 - 1600x900
 
-There is a [bug]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/11)) where sometimes the games list will show duplicates. Should be resolved soon.
 
 Games list items have a [fixed font size and Favorite icon size]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/7)). 
 ## Tips
