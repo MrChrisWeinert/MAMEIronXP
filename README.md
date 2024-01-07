@@ -64,8 +64,6 @@ _TODO_: Implement "acceleration" so you can navigate the list VERY fast when hol
 
 There is a [bug]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/11)) where sometimes the games list will show duplicates. Should be resolved soon.
 
-Dark theme on Ubuntu (and maybe Windows?) will [make the game list hard to read]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/8)). This will be resolved soon.
-
 Games list items have a [fixed font size and Favorite icon size]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/7)). 
 ## Tips
 
