@@ -30,7 +30,7 @@
           <Image Name="GameSnapshot" />
       </Panel>
       <Panel ZIndex="40" Name="GameMetadataPanel" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" >
-        <TextBox x:Name="GameMetadata" Focusable="False" Background="YellowGreen" FontFamily="avares://MAMEIronXP/Assets/Arcade.ttf#" Opacity="50" BorderBrush="Black"></TextBox>
+        <TextBox x:Name="GameMetadata" Focusable="False" Background="YellowGreen" FontFamily="avares://MAMEIronXP/Assets/Arcade.ttf#" Opacity="50" BorderBrush="Black" Foreground="Black"></TextBox>
       </Panel>
       <Panel ZIndex="40" Grid.Row="0" Grid.Column="1">
         <Grid ShowGridLines="false" ColumnDefinitions="*,*,*,*,*,*,*,*,*,*" RowDefinitions="*,*,*,*,*,*,*,*,*,*">
