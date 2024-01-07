@@ -30,7 +30,7 @@
           <Image Name="GameSnapshot" />
       </Panel>
       <Panel ZIndex="40" Name="GameMetadataPanel" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" >
-        <TextBox x:Name="GameMetadata" Focusable="False" Background="YellowGreen" FontFamily="avares://MAMEIronXP/Assets/Arcade.ttf#" Opacity="50"></TextBox>
+        <TextBox x:Name="GameMetadata" Focusable="False" Background="YellowGreen" FontFamily="avares://MAMEIronXP/Assets/Arcade.ttf#" Opacity="50" BorderBrush="Black"></TextBox>
       </Panel>
       <Panel ZIndex="40" Grid.Row="0" Grid.Column="1">
         <Grid ShowGridLines="false" ColumnDefinitions="*,*,*,*,*,*,*,*,*,*" RowDefinitions="*,*,*,*,*,*,*,*,*,*">
@@ -38,7 +38,7 @@
             <Image Source="avares://MAMEIronXP/Assets/MAMEIronXPTitle.png" />
           </Panel>
           <Panel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="8" Grid.RowSpan="9">
-            <ListBox x:Name="GamesListBox" ScrollViewer.VerticalScrollBarVisibility="Hidden" Focusable="True" >
+            <ListBox x:Name="GamesListBox" ScrollViewer.VerticalScrollBarVisibility="Hidden" Focusable="True" Background="#F2F2F2" Foreground="Black" >
               <ListBox.ItemTemplate>
                 <DataTemplate>
                   <StackPanel Orientation="Horizontal">
