@@ -11,7 +11,7 @@ Ideally it will scale across different sized-screens, and function the same acro
 1) Download the MAME binary and extract it to a directory of your choice (e.g. C:\MAME). You'll want to download a version of MAME that matches the version of your roms. I'm using version .258
 https://github.com/mamedev/mame/releases/download/mame0258/mame0258b_64bit.exe
 2) Download a full set of Snapshots and extract them (just the .png files) to your MAME "snap" directory (e.g. C:\MAME\snap). https://www.progettosnaps.net/snapshots/
-3) Download & install .NET 8: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+3) Download & install the .NET 8 SDK (not runtime): https://dotnet.microsoft.com/en-us/download/dotnet/8.0
 4) Download MAMEIronXP and extract it to a directory of your choice (e.g. C:\MAMEIronXP).
 5) Edit the App.config file and tell it where you extracted MAME.
 6) To build MAMEIronXP, open a command prompt/terminal and navigate to your MAMEIronXP directory (C:\MAMEIronXP). Type: ```dotnet build```
@@ -42,6 +42,34 @@ In short, change to your ~/MAME directory and run the following commands:
 7) Edit the new App.config file and tell it where you extracted MAME.
 8) To build MAMEIronXP, open a terminal and navigate to your MAMEIronXP directory (~/MAMEIronXP). Type: ```dotnet build```
 9) To run MAMEIronXP after building, you run it like any other executable ```~/MAMEIronXP/bin/Debut/net8.0/MAMEIronXP```
+
+# Running MAMEIronXP
+"C" on the keyboard will mark a game as a Favorite and a little Pac-Man icon will show up to the left of a game. The game will show up at the top of the Games list so it's easily accessible. The game will still show up in the list in alphabetic order. Pressing C again will unfavorite a game.
+_TODO_: make this into a long-press to prevent accidental favorite/unfavorites.
+
+"1" on the keyboard will make a selection (start a game, or make a selection on the Exit menu)
+
+"ESC" on the keyboard will bring up the Exit menu. Pressing it again will exit out of the Exit menu.
+
+"Up/Down" on the keyboard will scroll the games list.
+_TODO_: Implement "acceleration" so you can navigate the list VERY fast when holding down the Up/Down button.
+
+
+
+## Known Issues
+[Currently limited]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/7)) to the following resolutions with more on the way:
+- 2560x1440
+- 1920x1080
+- 1600x900
+
+There is a [bug]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/11)) where sometimes the games list will show duplicates. Should be resolved soon.
+
+Dark theme on Ubuntu (and maybe Windows?) will [make the game list hard to read]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/8)). This will be resolved soon.
+
+Games list items have a [fixed font size and Favorite icon size]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/7)). 
+## Tips
+
+
 
 # Where did this name come from?
 MAME = **M**ultiple **A**rcade **M**achine **E**mulator
