@@ -17,7 +17,7 @@ https://github.com/mamedev/mame/releases/download/mame0258/mame0258b_64bit.exe
 6) To build MAMEIronXP, open a command prompt/terminal and navigate to your MAMEIronXP directory (C:\MAMEIronXP). Type: ```dotnet build```
 7) To run MAMEIronXP, navigate to the output directory (C:\MAMEIronXP\bin\Debug\net8.0) and double-click one MAMEIronXP executable, or at a command prompt/terminal type: ```dotnet run```
 ## Ubuntu**
-**.NET 8 is a pain to install on older Ubuntu distributions because .NET 8 isn't in Ubuntu's package management system (apt). The "snap" install is quirky and doesn't install all the necessary dependencies. Therefore I'd recommend using Ubuntu 23.10 that version *does* include .NET 8 in the apt repositories.
+**.NET 8 is a pain to install on older Ubuntu distributions because .NET 8 isn't in Ubuntu's package management system (apt). The "snap" install is quirky and doesn't install all the necessary dependencies. Therefore I'd recommend using Ubuntu 23.10 - that version *does* include .NET 8 in the apt repositories.
 1) Download the MAME source code and extract it to a directory of your choice (e.g. ~/MAME). You'll want to use a version of MAME that matches the version of your roms. I'm using version .258
 https://github.com/mamedev/mame/archive/refs/tags/mame0258.zip
 2) Compile MAME. Follow the directions here: https://docs.mamedev.org/initialsetup/compilingmame.html 
@@ -45,25 +45,25 @@ In short, change to your ~/MAME directory and run the following commands:
 
 # Running MAMEIronXP
 "C" on the keyboard will mark a game as a Favorite and a little Pac-Man icon will show up to the left of a game. The game will show up at the top of the Games list so it's easily accessible. The game will still show up in the list in alphabetic order. Pressing C again will unfavorite a game.
-_TODO_: make this into a long-press to prevent accidental favorite/unfavorites.
+[_TODO_](https://github.com/MrChrisWeinert/MAMEIronXP/issues/12): make this into a long-press to prevent accidental favorite/unfavorites.
 
 "1" on the keyboard will make a selection (start a game, or make a selection on the Exit menu)
 
 "ESC" on the keyboard will bring up the Exit menu. Pressing it again will exit out of the Exit menu.
 
 "Up/Down" on the keyboard will scroll the games list.
-_TODO_: Implement "acceleration" so you can navigate the list VERY fast when holding down the Up/Down button.
+[_TODO_](https://github.com/MrChrisWeinert/MAMEIronXP/issues/13): Implement "acceleration" so you can navigate the list VERY fast when holding down the Up/Down button.
 
 
 
 ## Known Issues
-[Currently limited]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/7)) to the following resolutions with more on the way:
+[Currently limited](https://github.com/MrChrisWeinert/MAMEIronXP/issues/7) to the following resolutions with more on the way:
 - 2560x1440
 - 1920x1080
 - 1600x900
 
 
-Games list items have a [fixed font size and Favorite icon size]([url](https://github.com/MrChrisWeinert/MAMEIronXP/issues/7)). 
+Games list items have a [fixed font size and Favorite icon size](https://github.com/MrChrisWeinert/MAMEIronXP/issues/7).
 ## Tips
 
 
