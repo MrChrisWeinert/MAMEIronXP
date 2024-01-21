@@ -64,8 +64,6 @@ In short, change to your ~/MAME directory and run the following commands:
 
 
 Games list items have a [fixed font size and Favorite icon size](https://github.com/MrChrisWeinert/MAMEIronXP/issues/7).
-## Tips
-
 
 
 # Where did this name come from?
