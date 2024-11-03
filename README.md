@@ -13,6 +13,7 @@ We assume you already have MAME downloaded/compiled. If you don't, we'll include
 2) Download the latest MAMEIronXP release (https://github.com/MrChrisWeinert/MAMEIronXP/releases/download/1.1.0/MAMEIronXP-Win-x64-1.1.0.zip) and unzip it into a directory (e.g. C:\MAMEIronXP)
 3) Edit the MAMEIronXP.dll.config configuration file to match your environment (set the location of your MAME folder, etc.)
 4) Double-click on MAMEIronXP.exe. If Windows SmartScreen blocks the execution, you'll need to right-click on the executable and check the "unblock" box.
+
 ![screenshot](https://github.com/MrChrisWeinert/MAMEIronXP/blob/main/Assets/SmartScreen.png?raw=true)
 
 
