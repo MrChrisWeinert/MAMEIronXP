@@ -281,33 +281,6 @@ namespace MAMEIronXP
             }
         }
         
-        public class FavoriteIconConverter : IValueConverter
-        {
-            public static readonly FavoriteIconConverter Instance = new();
-
-            public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-            {
-                if (value is Boolean isFavorite // && parameter is string targetCase
-                    && targetType.IsAssignableTo(typeof(string)))
-                {
-                    if (isFavorite)
-                    {
-                        return "1";
-                    }
-                    else
-                    {
-                        return "0";
-                    }
-                }
-                // converter used for the wrong type
-                return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
-            }
-
-            public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-            {
-                throw new NotSupportedException();
-            }
-        }
         private void PersistGamesFile()
         {
             //Our "ObservableCollection<Game> _games" will contain duplicates for any favorited game.
