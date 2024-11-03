@@ -30,7 +30,7 @@
           <Image Name="GameSnapshot" />
       </Panel>
       <Panel ZIndex="40" Name="GameMetadataPanel" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" >
-        <TextBox x:Name="GameMetadata" Focusable="False" Background="YellowGreen" FontFamily="avares://MAMEIronXP/Assets/Arcade.ttf#" Opacity="50" BorderBrush="Black" Foreground="Black"></TextBox>
+        <TextBox x:Name="GameMetadata" Focusable="False" Background="YellowGreen" FontFamily="{StaticResource ArcadeFont}" Opacity="50" BorderBrush="Black" Foreground="Black"></TextBox>
       </Panel>
       <Panel ZIndex="40" Grid.Row="0" Grid.Column="1">
         <Grid ShowGridLines="false" ColumnDefinitions="*,*,*,*,*,*,*,*,*,*" RowDefinitions="*,*,*,*,*,*,*,*,*,*">
@@ -44,7 +44,7 @@
                   <StackPanel Orientation="Horizontal">
                     <Image IsVisible="{Binding IsFavorite}"  Width="50" Height="50" Source="avares://MAMEIronXP/Assets/MAMEIronXPFavorite.png" ></Image>
                     <Image IsVisible="{Binding !IsFavorite}" Width="50" Height="50" Source=""></Image>
-                    <TextBlock Text="{Binding Description}" x:Name="GameTextBlock" FontSize="36" Height="35" FontFamily="avares://MAMEIronXP/Assets/Arcade.ttf#" />
+                    <TextBlock Text="{Binding Description}" x:Name="GameTextBlock" FontSize="36" Height="35" FontFamily="{StaticResource ArcadeFont}" />
                   </StackPanel>
                 </DataTemplate>
               </ListBox.ItemTemplate>

@@ -4,4 +4,7 @@
     <Application.Styles>
         <FluentTheme />
     </Application.Styles>
+  <Application.Resources>
+    <FontFamily x:Key="ArcadeFont">avares://MAMEIronXP/Assets/Arcade.ttf#Arcade</FontFamily>
+  </Application.Resources>
 </Application>
