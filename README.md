@@ -65,6 +65,8 @@ In short, change to your ~/MAME directory and run the following commands:
 
 Games list items have a [fixed font size and Favorite icon size](https://github.com/MrChrisWeinert/MAMEIronXP/issues/7).
 
+Does not currently support Wayland [this is an Avalonia limitation as of 11.2]. MAMEIronXP will run on the latest version of Raspbian (tested on Raspberry Pi 5), but you have to disable Wayland first.
+
 
 # Where did this name come from?
 MAME = **M**ultiple **A**rcade **M**achine **E**mulator
