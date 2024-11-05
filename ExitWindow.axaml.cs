@@ -37,7 +37,7 @@ namespace MAMEIronXP
                             }
                             else
                             {
-                                //TODO: Implement shutdown for other operating systems
+                                System.Diagnostics.Process.Start("shutdown", "-r now");
                             }
                             break;
                         case 2:
@@ -48,7 +48,7 @@ namespace MAMEIronXP
                             }
                             else
                             {
-                                //TODO: Implement shutdown for other operating systems
+                                System.Diagnostics.Process.Start("shutdown", "-h now");
                             }
                             break;
                     }                    
