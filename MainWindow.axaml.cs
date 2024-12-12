@@ -449,10 +449,12 @@ namespace MAMEIronXP
             HashSet<Game> favorites = _games.Where(g=> g.IsFavorite).OrderBy(g => g.Description).ToHashSet<Game>();
             HashSet<Game> allTheGames = _games.OrderBy(g => g.Description).ToHashSet<Game>();
             _games.Clear();
+            //Now that we've cleared the list, re-add all the favorites at the top of the list...
             foreach (var game in favorites)
             {
                 _games.Add(game);
             }
+            //...and then add all games
             foreach (var game in allTheGames)
             {
                 _games.Add(game);
