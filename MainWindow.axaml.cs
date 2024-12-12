@@ -41,9 +41,7 @@ namespace MAMEIronXP
         private DateTime _startTimeCPress;
         private DateTime _startTimeVPress;
         private const int LONGPRESSMILLISECONDS = 3000;
-
-        //TODO: Should have ways of quickly navigating through the list(jump to end, jump to beginning, "accelerate" through the list using the JUMPDISTANCE that was in MAMEIron, etc)
-        private int JUMPDISTANCE = 25;
+        private int JUMPDISTANCE = 10;
 
         public MainWindow()
         {
@@ -62,6 +60,8 @@ namespace MAMEIronXP
             GamesListBox.SelectedIndex = 0;
             GamesListBox.SelectionMode = SelectionMode.Single;
             GamesListBox.SelectionChanged += GamesListBox_SelectionChanged;
+            GamesListBox.AddHandler(InputElement.KeyDownEvent, OnPreviewKeyDown, RoutingStrategies.Tunnel);
+            GamesListBox.AddHandler(InputElement.KeyUpEvent, OnPreviewKeyUp, RoutingStrategies.Tunnel);
             GamesListBox.KeyDown += GamesListBox_KeyDown;
             GamesListBox.KeyUp += GamesListBox_KeyUp;
             PointerPressed += MainWindow_PointerPressed;
@@ -140,6 +140,111 @@ namespace MAMEIronXP
             //throw new NotImplementedException();
         }
 
+        private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Down:
+                    //If the timer is set to zero, that means the user has *just* initiated the keydown press. Start the timer...
+                    if (_startTimeDownPress == new DateTime(0))
+                    {
+                        _startTimeDownPress = DateTime.Now;
+                    }
+                    //If the user is already on the last game in the GamesListBox, don't do anything at all.
+                    if (GamesListBox.SelectedIndex == GamesListBox.Items.Count - 1)
+                    {
+                        e.Handled = true;
+                        break;
+                    }
+                    //if the user has been holding the "DOWN" key for over 3 seconds [LONGPRESSMILLISECONDS]...
+
+                    //******KNOWN BUG******
+                    //  There is a known bug that I don't want to chase down. If the last game in the list (in my testing, this is "zzyzzyxx") is marked as a favorite, and if we happen to land on that item, the SelectedIndex will not be the last item in the list (in my testing, this was "1994").
+                    //  Instead, the SelectedIndex will be it's position at the top of the Favorites list, in my testing, this was "17". So if the user is still holding down, and happens to land on the last item in the list, and that item is marked as a Favorite, the scrolling will scroll past the last item and restart at the top of the list.
+                    //  It's irritating, but not super important to me because no one is going to favorite that game. Cue the Bill Gates quote "no one will ever need more than 640K of memory!"
+                    //******END KNOWN BUG******
+                    else if (_startTimeDownPress.AddMilliseconds(LONGPRESSMILLISECONDS) < DateTime.Now)
+                    {
+                        Game selectedGame = (Game)GamesListBox.Items[GamesListBox.SelectedIndex];
+                        //We have to go through some shenanigans beacuse when a game is marked as a Favorite, we have two copies of the game in our list...
+                        // Assume that MsPacMan is marked as a Favorite; we might find it at Index 3 (in our Favorites) and also at Index 1200. When scrolling through the list and encounter the second one, the "SelectedIndex" will appear as 3, which causes our listbox to jump around.
+                        // We need to manually force the issue and set the Index to 1200 so it can continue scrolling as intended.
+                        if (selectedGame.IsFavorite)
+                        {
+                            int i = 0;
+                            bool isFirstInstanceFound = false;
+                            foreach (Game g in GamesListBox.Items)
+                            {
+                                if (g.Name == selectedGame.Name)
+                                {
+                                    //We found the first one...
+                                    if (!isFirstInstanceFound)
+                                    {
+                                        isFirstInstanceFound = true;
+                                    }
+                                    //We found the second one. This is the Index we want to use.
+                                    else
+                                    {
+                                        GamesListBox.SelectedIndex = i;
+                                        break;
+                                    }
+                                }
+                                i++;
+                            }
+                        }
+                        //Prevent us from jumping past the end of the list.
+                        if (GamesListBox.SelectedIndex + JUMPDISTANCE > GamesListBox.Items.Count)
+                        {
+                            GamesListBox.SelectedIndex = GamesListBox.Items.Count - 1;
+                            GamesListBox.Focus();
+                            e.Handled = true;
+                            break;
+                        }
+                        // Jump 10 [JUMPDISTANCE] games in the list.
+                        else
+                        {
+                            GamesListBox.SelectedIndex += JUMPDISTANCE;
+                        }
+                        GamesListBox.SelectedItem = GamesListBox.Items[GamesListBox.SelectedIndex];
+                        GamesListBox.ScrollIntoView(GamesListBox.SelectedItem);
+                        GamesListBox.Focus();
+                    }
+                    break;
+                case Key.Up:
+                    if (_startTimeUpPress == new DateTime(0))
+                    {
+                        _startTimeUpPress = DateTime.Now;
+                    }
+                    else if (_startTimeUpPress.AddMilliseconds(LONGPRESSMILLISECONDS) < DateTime.Now && _startTimeUpPress != new DateTime(0))
+                    {
+                        if (GamesListBox.SelectedIndex - JUMPDISTANCE < 0)
+                        {
+                            GamesListBox.SelectedIndex = 0;
+                        }
+                        else
+                        {
+                            GamesListBox.SelectedIndex -= JUMPDISTANCE;
+                        }
+                        GamesListBox.SelectedItem = GamesListBox.Items[GamesListBox.SelectedIndex];
+                        GamesListBox.ScrollIntoView(GamesListBox.SelectedItem);
+                        GamesListBox.Focus();
+                    }
+                    break;
+            }
+        }
+        private void OnPreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            //When someone releases the up/down joystick, reset the timer to zero.
+            switch (e.Key)
+            {
+                case Key.Down:
+                    _startTimeDownPress = new DateTime(0);
+                    break;
+                case Key.Up:
+                    _startTimeUpPress = new DateTime(0);
+                    break;
+            }
+        }
         private void GamesListBox_KeyDown(object? sender, Avalonia.Input.KeyEventArgs e)
         {
             switch (e.Key)
