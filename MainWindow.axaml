@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MAMEIronXP"
+        xmlns:models="clr-namespace:MAMEIronXP.Models"
         mc:Ignorable="d" d:DesignWidth="2560" d:DesignHeight="1440"
         WindowState="FullScreen"
         Cursor="None"
@@ -20,17 +21,23 @@
     4a) GameListBox
     4b) GameMetadata
     4c) MAMEIronXPTitle.png
+
+    Everything below is laid out on a fixed 2560x1440 design canvas (the resolution the
+    cabinet artwork was drawn at). The Viewbox scales that whole canvas to fit whatever
+    the real screen resolution turns out to be, so the UI works on any resolution
+    without any resolution-specific code.
   -->
-  <Panel>
+  <Viewbox Stretch="Fill">
+  <Panel Width="2560" Height="1440">
     <Grid ShowGridLines="false" ColumnDefinitions="*,*" RowDefinitions="*">
       <Panel ZIndex="30" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
         <Image Source="avares://MAMEIronXP/Assets/MAMEIronXPCabinetV3.png"  />
       </Panel>
-      <Panel ZIndex="20" Name="GameSnapshotPanel" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" >
-          <Image Name="GameSnapshot" />
+      <Panel ZIndex="20" Name="GameSnapshotPanel" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="550,350,0,0" >
+          <Image Name="GameSnapshot" Width="400" />
       </Panel>
-      <Panel ZIndex="40" Name="GameMetadataPanel" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" >
-        <TextBox x:Name="GameMetadata" Focusable="False" Background="YellowGreen" FontFamily="{StaticResource ArcadeFont}" Opacity="50" BorderBrush="Black" Foreground="Black"></TextBox>
+      <Panel ZIndex="40" Name="GameMetadataPanel" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="460,810,0,0" >
+        <TextBox x:Name="GameMetadata" Focusable="False" Background="YellowGreen" FontFamily="{StaticResource ArcadeFont}" Opacity="50" BorderBrush="Black" Foreground="Black" Width="580" FontSize="22" Padding="10,10,6,5"></TextBox>
       </Panel>
       <Panel ZIndex="40" Grid.Row="0" Grid.Column="1">
         <Grid ShowGridLines="false" ColumnDefinitions="*,*,*,*,*,*,*,*,*,*" RowDefinitions="*,*,*,*,*,*,*,*,*,*">
@@ -38,9 +45,9 @@
             <Image Source="avares://MAMEIronXP/Assets/MAMEIronXPTitle.png" />
           </Panel>
           <Panel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="8" Grid.RowSpan="9">
-            <ListBox x:Name="GamesListBox" ScrollViewer.VerticalScrollBarVisibility="Hidden" Focusable="True" Background="#F2F2F2" Foreground="Black" >
+            <ListBox x:Name="GamesListBox" ScrollViewer.VerticalScrollBarVisibility="Hidden" Focusable="True" Background="#F2F2F2" Foreground="Black" CornerRadius="25" Margin="0,0,0,72" >
               <ListBox.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="models:Game">
                   <StackPanel Orientation="Horizontal">
                     <Image IsVisible="{Binding IsFavorite}"  Width="50" Height="50" Source="avares://MAMEIronXP/Assets/MAMEIronXPFavorite.png" ></Image>
                     <Image IsVisible="{Binding !IsFavorite}" Width="50" Height="50" Source=""></Image>
@@ -54,4 +61,5 @@
       </Panel>
     </Grid>
   </Panel>
+  </Viewbox>
 </Window>

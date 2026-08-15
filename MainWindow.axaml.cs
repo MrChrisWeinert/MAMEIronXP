@@ -81,51 +81,6 @@ namespace MAMEIronXP
             GamesListBox.Focus();
             DisplaySnapshot((Game)GamesListBox.SelectedItem);
             DisplayMetadata((Game)GamesListBox.SelectedItem);
-
-            //1) Get screen resolution and move objects where they need to be accordingly
-            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                PixelSize windowSize = desktop.MainWindow.Screens.Primary.Bounds.Size;
-                if (windowSize.Width == 2560 && windowSize.Height == 1440)
-                {
-                    //1440p
-                    GameSnapshotPanel.Margin = new Thickness(550, 350, 0, 0);
-                    GameSnapshot.Width = 400;
-                    GameMetadataPanel.Margin = new Thickness(460, 810, 0, 0);
-                    GameMetadata.Width = 580;
-                    GameMetadata.FontSize = 22;
-                    GameMetadata.Padding = new Thickness(10, 10, 6, 5);
-                    GamesListBox.CornerRadius = new CornerRadius(25);
-                    //ImageIsFavorite.Width = 50;
-                    //ImageIsFavorite.Height = 50;
-                    //ImageIsNotFavorite.Width = 50;
-                    //ImageIsNotFavorite.Height = 50;
-                    GamesListBox.Margin = new Thickness(0,0,0,windowSize.Height/20);
-                }
-                else if (windowSize.Width == 1920 && windowSize.Height == 1080)
-                {
-                    //1080p
-                    GameSnapshotPanel.Margin = new Thickness(415, 275, 0, 0);
-                    GameSnapshot.Width = 300;
-                    GameMetadataPanel.Margin = new Thickness(345, 605, 0, 0);
-                    GameMetadata.Width = 433;
-                    GameMetadata.FontSize = 16.5;
-                    GameMetadata.Padding = new Thickness(10, 10, 6, 5);
-                    GamesListBox.CornerRadius = new CornerRadius(15);
-                    GamesListBox.Margin = new Thickness(0,0,0,windowSize.Height/20);
-                }
-                else if (windowSize.Width == 1600 && windowSize.Height == 900)
-                {
-                    GameSnapshotPanel.Margin = new Thickness(345, 220, 0, 0);
-                    GameSnapshot.Width = 250;
-                    GameMetadataPanel.Margin = new Thickness(285, 500, 0, 0);
-                    GameMetadata.Width = 365;
-                    GameMetadata.FontSize = 14;
-                    GameMetadata.Padding = new Thickness(10, 10, 6, 5);
-                    GamesListBox.CornerRadius = new CornerRadius(15);
-                    GamesListBox.Margin = new Thickness(0,0,0,windowSize.Height/20);
-                }
-            }
         }
         /// <summary>
         /// We always want to "handle" the event so the mouse click doesn't actually mouse-click in our app.

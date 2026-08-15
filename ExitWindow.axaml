@@ -15,7 +15,7 @@
         Loaded="ExitWindow_Loaded">
   <ListBox x:Name="ExitListBox" Width="425" Height="175" Focusable="True" CornerRadius="5" Opacity="100" FontFamily="{StaticResource ArcadeFont}" Background="#F2F2F2" Foreground="Black">
     <ListBox.ItemTemplate>
-      <DataTemplate>
+      <DataTemplate x:DataType="x:String">
         <StackPanel Orientation="Vertical">
           <TextBlock Text="{Binding}" FontSize="36" />
         </StackPanel>

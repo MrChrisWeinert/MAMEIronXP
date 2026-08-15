@@ -16,6 +16,7 @@ namespace MAMEIronXP
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
+                .UseWayland()
                 .LogToTrace();
     }
 }

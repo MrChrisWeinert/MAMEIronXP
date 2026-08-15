@@ -8,13 +8,13 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
   </PropertyGroup>
   <ItemGroup>
-    <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Include="Assets/**" />
    </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
-    <None Remove="Assets\Animation.gif" />
-    <None Remove="Assets\MAMEIronXPCabinet2.afphoto" />
-    <None Remove="Assets\Screenshot.jpg" />
+    <None Remove="Assets/Animation.gif" />
+    <None Remove="Assets/MAMEIronXPCabinet2.afphoto" />
+    <None Remove="Assets/Screenshot.jpg" />
   </ItemGroup>
   <ItemGroup>
     <!--This helps with theme dll-s trimming.
@@ -24,27 +24,30 @@
     <TrimmableAssembly Include="Avalonia.Themes.Default" />
   </ItemGroup>
   <ItemGroup>
-    <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Include="Assets/**" />
    </ItemGroup>
   <ItemGroup>
-    <AvaloniaResource Remove="Assets\Animation.gif" />
-    <AvaloniaResource Remove="Assets\catver.ini" />
-    <AvaloniaResource Remove="Assets\MAMEIronXPCabinetV3.afphoto" />
-    <AvaloniaResource Remove="Assets\MAMEIronXPFavorite.afphoto" />
-    <AvaloniaResource Remove="Assets\Screenshot.jpg" />
+    <AvaloniaResource Remove="Assets/Animation.gif" />
+    <AvaloniaResource Remove="Assets/catver.ini" />
+    <AvaloniaResource Remove="Assets/MAMEIronXPCabinetV3.afphoto" />
+    <AvaloniaResource Remove="Assets/MAMEIronXPFavorite.afphoto" />
+    <AvaloniaResource Remove="Assets/Screenshot.jpg" />
   </ItemGroup>
    <ItemGroup>
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Include="Avalonia" Version="11.2.0" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.0" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.2.0" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.0" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
+    <PackageReference Include="Avalonia" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="12.1.2" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Wayland" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.1" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="10.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.11" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
    </ItemGroup>
    <ItemGroup>
-     <None Update="Assets\catver.ini">
+     <None Update="Assets/catver.ini">
        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
      </None>
      <None Update="appsettings.json">

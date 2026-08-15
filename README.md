@@ -73,15 +73,7 @@ The workflow lives at `.github/workflows/release-binaries.yml`.
 
 
 # Known Issues
-[Currently limited](https://github.com/MrChrisWeinert/MAMEIronXP/issues/7) to the following resolutions with more on the way:
-- 2560x1440
-- 1920x1080
-- 1600x900
-
-
-Games list items have a [fixed font size and Favorite icon size](https://github.com/MrChrisWeinert/MAMEIronXP/issues/7).
-
-Does not currently support Wayland [this is an Avalonia limitation as of 11.2]. MAMEIronXP will run on the latest version of Raspbian (tested on Raspberry Pi 5), but you have to disable Wayland first.
+Wayland support is experimental as of Avalonia 12.1 (previously required disabling Wayland on the Pi). If you hit issues, disabling Wayland and falling back to X11 is still an option.
 
 # Prerequisites
 ## Download/install MAME
