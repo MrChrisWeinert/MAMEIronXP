@@ -1,0 +1,86 @@
+name: Release Binaries
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Publish ${{ matrix.target.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - name: win-x64
+            rid: win-x64
+            binary: MAMEIronXP.exe
+          - name: linux-arm64
+            rid: linux-arm64
+            binary: MAMEIronXP
+          - name: osx-arm64
+            rid: osx-arm64
+            binary: MAMEIronXP
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore MAMEIronXP.sln
+
+      - name: Publish
+        run: dotnet publish MAMEIronXP.csproj -c Release -r ${{ matrix.target.rid }} --self-contained true -o artifacts/${{ matrix.target.name }}
+
+      - name: Ensure executable permissions on Unix targets
+        if: matrix.target.rid != 'win-x64'
+        run: chmod +x artifacts/${{ matrix.target.name }}/${{ matrix.target.binary }}
+
+      - name: Determine package version
+        id: version
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            echo "value=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=manual-${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create zip package
+        run: |
+          mkdir -p packages
+          cd artifacts/${{ matrix.target.name }}
+          zip -r ../../packages/MAMEIronXP-${{ matrix.target.name }}-${{ steps.version.outputs.value }}.zip .
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-${{ matrix.target.name }}
+          path: packages/*.zip
+
+  release:
+    name: Attach assets to GitHub Release
+    needs: publish
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    steps:
+      - name: Download built packages
+        uses: actions/download-artifact@v4
+        with:
+          pattern: package-*
+          path: packages
+          merge-multiple: true
+
+      - name: Upload assets to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: packages/*.zip

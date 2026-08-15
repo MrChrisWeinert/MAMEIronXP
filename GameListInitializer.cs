@@ -84,7 +84,8 @@ namespace MAMEIronXP
         /// </summary>
         private void LoadCategories()
         {
-            using (StreamReader sr = new StreamReader(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Assets", "catver.ini")))
+            string catverPath = Path.Combine(AppContext.BaseDirectory, "Assets", "catver.ini");
+            using (StreamReader sr = new StreamReader(catverPath))
             {
                 string? line = sr.ReadLine();
                 while (line != null)
@@ -114,7 +115,7 @@ namespace MAMEIronXP
                 string gameName = node.Attributes["name"].Value.ToString();
                 if (node.Attributes["cloneof"] != null)
                 {
-                    //TODO: Make this a configurable parameter via App.config?
+                    //TODO: Make this a configurable parameter via appsettings.json?
                     //Just because *I* don't want clones doesn't mean someone else doesn't.
                     //If it's a clone, we don't want it in our list. Skip it.
                     continue;
@@ -153,7 +154,7 @@ namespace MAMEIronXP
                             continue;
                         }
 
-                        //TODO: Make this a configurable parameter via App.config?
+                        //TODO: Make this a configurable parameter via appsettings.json?
                         //Filter out games by category/subcategory.
                         //I'm sure there's an easier/better way of handling this.
                         if (gameCategory == "Electromechanical" || 
@@ -200,7 +201,7 @@ namespace MAMEIronXP
 
         private bool isValidScreenshot(string screenshot)
         {
-            //TODO: These shouldn't be hard-coded here. Find a better spot like App.Config, or maybe some sort of "killlist/ignore" file.
+            //TODO: These shouldn't be hard-coded here. Find a better spot like appsettings.json, or maybe some sort of "killlist/ignore" file.
             //There are several screenshots for games that use a "default" or "image not found" or some generic varation of a blank screen. I don't want those games, so I filter them out manually.
             _killList.Add("a766be38df34c5db61ad5cd559919487");
             _killList.Add("30ab4d58332ef5332affe5f3320c647a");

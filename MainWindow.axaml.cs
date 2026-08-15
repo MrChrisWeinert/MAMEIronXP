@@ -6,12 +6,12 @@ using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
+using Microsoft.Extensions.Configuration;
 using MAMEIronXP.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -45,12 +45,22 @@ namespace MAMEIronXP
 
         public MainWindow()
         {
-            //Initialize all our private variables
-            _MAMEDirectory = ConfigurationManager.AppSettings["MAMEDirectory"];
-            _mameExe = Path.Combine(_MAMEDirectory, ConfigurationManager.AppSettings["MAMEExecutable"]);
-            _mameArgs = ConfigurationManager.AppSettings["MAME_Args"];
-            _logFile = ConfigurationManager.AppSettings["LogFile"];
-            _snapDirectory = ConfigurationManager.AppSettings["SnapDirectory"];
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+                .Build();
+
+            _MAMEDirectory = ResolvePath(GetSetting(configuration, "MAME:Directory", "."), AppContext.BaseDirectory);
+            _mameExe = ResolvePath(
+                GetSetting(configuration, "MAME:Executable", OperatingSystem.IsWindows() ? "mame.exe" : "mame"),
+                _MAMEDirectory);
+            _mameArgs = GetSetting(configuration, "MAME:Args", "-autosave -skip_gameinfo -video bgfx");
+            _logFile = ResolvePath(
+                GetSetting(configuration, "MAME:LogFile", "MAMElogfile.log"),
+                _MAMEDirectory);
+            _snapDirectory = ResolvePath(
+                GetSetting(configuration, "MAME:SnapDirectory", "snap"),
+                _MAMEDirectory);
             _gamesJson = Path.Combine(_MAMEDirectory, "games.json");
             _logger = new Logger(_logFile);
 
@@ -277,13 +287,13 @@ namespace MAMEIronXP
                 //attempt to create the log file and bail out if it can't be created.
                 try
                 {
-                    File.Create(_logFile);
+                    using FileStream _ = File.Create(_logFile);
                 }
                 catch
                 {
                     errorText = $"Error: Unable to create log file here: {_logFile}";
                     Console.WriteLine(errorText);
-                    Console.WriteLine("1) Check the LogFile setting in the App.config to make sure you're pointed at a location suitable for logging.");
+                    Console.WriteLine("1) Check the MAME:LogFile setting in appsettings.json to make sure you're pointed at a location suitable for logging.");
                     Environment.Exit(1);
                 }
             }
@@ -292,7 +302,7 @@ namespace MAMEIronXP
                 errorText = $"Error: {_mameExe} was not found.";
                 Console.WriteLine(errorText);
                 Console.WriteLine("1) Check out the Getting Started section of the README (https://github.com/MrChrisWeinert/MAMEIronXP#getting-started)");
-                Console.WriteLine("2) Check the MAMEDirectory and MAMEExecutable settings in the App.config to make sure you're pointed at your MAME executable.");
+                Console.WriteLine("2) Check the MAME:Directory and MAME:Executable settings in appsettings.json to make sure you're pointed at your MAME executable.");
                 _logger.LogInfo(errorText);
                 Environment.Exit(1);
             }
@@ -300,7 +310,7 @@ namespace MAMEIronXP
             {
                 errorText = $"Error: {_snapDirectory} was not found.";
                 Console.WriteLine("1) Check out the Getting Started section of the README (https://github.com/MrChrisWeinert/MAMEIronXP#getting-started)");
-                Console.WriteLine("2) Verify that your SnapDirectory setting in the App.config is correct.");
+                Console.WriteLine("2) Verify that your MAME:SnapDirectory setting in appsettings.json is correct.");
                 Console.WriteLine(errorText);
                 _logger.LogInfo(errorText);
                 Environment.Exit(1);
@@ -462,6 +472,17 @@ namespace MAMEIronXP
             //Restore the SelectedItem back to whatever was selected before we refreshed the list.
             GamesListBox.SelectedItem = selectedGame;
             GamesListBox.Focus();
+        }
+
+        private static string GetSetting(IConfiguration configuration, string key, string fallback)
+        {
+            string? value = configuration[key];
+            return string.IsNullOrWhiteSpace(value) ? fallback : value.Trim();
+        }
+
+        private static string ResolvePath(string path, string basePath)
+        {
+            return Path.IsPathRooted(path) ? Path.GetFullPath(path) : Path.GetFullPath(Path.Combine(basePath, path));
         }
     }
 }

@@ -8,16 +8,42 @@ We assume you already have MAME downloaded and installed/compiled. If not, head 
 
 ## Windows
 1) Download the latest MAMEIronXP release (https://github.com/MrChrisWeinert/MAMEIronXP/releases/download/1.1.0/MAMEIronXP-Win-x64-1.1.0.zip) and unzip it into a directory (e.g. C:\MAMEIronXP)
-2) Edit the MAMEIronXP.dll.config configuration file to match your environment (set the location of your MAME folder, etc.)
+2) Edit `appsettings.json` to match your environment (set `MAME:Directory`, `MAME:Executable`, etc.).
 3) Double-click on MAMEIronXP.exe. If Windows SmartScreen blocks the execution, you'll need to right-click on the executable and check the "Unblock" box.
 
 ![screenshot](https://github.com/MrChrisWeinert/MAMEIronXP/blob/main/Assets/SmartScreen.png?raw=true)
 
 ## Ubuntu
 1) Download the latest MAMEIronXP release (https://github.com/MrChrisWeinert/MAMEIronXP/releases/download/1.1.0/MAMEIronXP-Linux-x64-1.1.0.zip) and unzip it into a directory (e.g. ~/MAMEIronXP)
-2) Edit the MAMEIronXP.dll.config configuration file to match your environment (set the location of your MAME folder, etc.)
+2) Edit `appsettings.json` to match your environment (set `MAME:Directory`, `MAME:Executable`, etc.).
 3) Add the execute permission to MAMEIronXP: ```chmod +x MAMEIronXP```
 4) Run MAMEIronXP: ```./MAMEIronXP```
+
+## macOS (Apple Silicon)
+1) Download the latest macOS ARM release asset from the Releases page:
+https://github.com/MrChrisWeinert/MAMEIronXP/releases
+2) Unzip it into a directory (e.g. `~/Applications/MAMEIronXP`).
+3) Add execute permissions: `chmod +x MAMEIronXP`
+4) Run it from Terminal: `./MAMEIronXP`
+
+# Pre-built Binaries via GitHub Actions
+This repository includes an automated release workflow that builds these targets:
+- `win-x64`
+- `linux-arm64` (Raspberry Pi 5 when using a 64-bit OS)
+- `osx-arm64` (Apple Silicon)
+
+The workflow lives at `.github/workflows/release-binaries.yml`.
+
+## How to publish a new release
+1) Commit and push your changes to `main`.
+2) Create and push a version tag (example `v1.2.0`):
+   - `git tag v1.2.0`
+   - `git push origin v1.2.0`
+3) In GitHub, open the new release tag and publish a release.
+4) The workflow will attach zip files named like:
+   - `MAMEIronXP-win-x64-v1.2.0.zip`
+   - `MAMEIronXP-linux-arm64-v1.2.0.zip`
+   - `MAMEIronXP-osx-arm64-v1.2.0.zip`
 
 # MAMEIronXP Controls
 ## Keyboard
