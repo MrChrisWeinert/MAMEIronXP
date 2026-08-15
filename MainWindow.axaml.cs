@@ -27,6 +27,7 @@ namespace MAMEIronXP
         private string _mameExe;
         private string _mameArgs;
         private string _gamesJson;
+        private string _userDataJson;
         private string _logFile;
         private Dictionary<string, Bitmap> _snapshots = new Dictionary<string, Bitmap>();
 
@@ -60,6 +61,7 @@ namespace MAMEIronXP
                 GetSetting(configuration, "MAME:SnapDirectory", "snap"),
                 _MAMEDirectory);
             _gamesJson = Path.Combine(_MAMEDirectory, "games.json");
+            _userDataJson = Path.Combine(_MAMEDirectory, "user-data.json");
             _logger = new Logger(_logFile);
 
             InitializeComponent();
@@ -270,14 +272,16 @@ namespace MAMEIronXP
             }
             else if (!File.Exists(_gamesJson))
             {
-                //INFO: games.json is a file that MAMEIronXP generates once (and only once). It is the main working file that MAMEIronXP subsequently uses to load games and is also where a game's PlayCount is tracked as well as its "Favorite" status.
-                //      This file is periodically persisted back to disk if there are changes (i.e. a game is marked as a Favorite or it's Play Count is incremented).
+                //INFO: games.json is MAMEIronXP's catalog of games, generated fresh from MAME's own game list whenever it doesn't exist.
+                //      It's safe to delete (e.g. after updating MAME to pull in new/changed games) because it holds no user data.
+                //      A game's PlayCount and IsFavorite status live separately in user-data.json (see LoadGamesFromJSON/PersistUserDataFile) so they survive a games.json regeneration.
                 GameListInitializer gameListInitializer = new GameListInitializer(_MAMEDirectory, _mameExe, _snapDirectory);
                 foreach (Game game in gameListInitializer.GenerateGameList().OrderBy(x => x.Description))
                 {
                     _games.Add(game);
                 }
-                PersistGamesFile();
+                PersistCatalogFile();
+                _games.Clear();
             }
             LoadGamesFromJSON();
             LoadImagesIntoDictionary();
@@ -322,23 +326,55 @@ namespace MAMEIronXP
         private void LoadGamesFromJSON()
         {
             //TODO: Add error handling in here in case someone hand-edits the games.json file and makes a mistake.
+            ObservableCollection<Game> tempListOfGames;
             using (StreamReader sr = new StreamReader(_gamesJson))
             {
                 string json = sr.ReadToEnd();
                 sr.Close();
                 sr.Dispose();
-                var tempListOfGames = JsonConvert.DeserializeObject<ObservableCollection<Game>>(json);
-                //Ensure favorites show up at the top of the list
-                foreach (Game game in tempListOfGames.Where(y => y.IsFavorite == true).OrderBy(y => y.Description))
+                tempListOfGames = JsonConvert.DeserializeObject<ObservableCollection<Game>>(json);
+            }
+
+            Dictionary<string, UserGameStats> userData;
+            if (File.Exists(_userDataJson))
+            {
+                using StreamReader sr = new StreamReader(_userDataJson);
+                userData = JsonConvert.DeserializeObject<Dictionary<string, UserGameStats>>(sr.ReadToEnd()) ?? new Dictionary<string, UserGameStats>();
+            }
+            else
+            {
+                //One-time migration: older versions of MAMEIronXP stored PlayCount/IsFavorite directly inside games.json.
+                //If we find any of that data still embedded in games.json (and haven't split it out yet), carry it over to user-data.json now,
+                //so it survives the next time games.json gets regenerated (e.g. after a MAME update).
+                userData = tempListOfGames
+                    .Where(g => g.IsFavorite || g.PlayCount > 0)
+                    .ToDictionary(g => g.Name, g => new UserGameStats { PlayCount = g.PlayCount, IsFavorite = g.IsFavorite });
+                if (userData.Count > 0)
                 {
-                    _games.Add(game);
+                    using StreamWriter sw = new StreamWriter(_userDataJson, false);
+                    sw.WriteLine(JsonConvert.SerializeObject(userData));
                 }
-                //Note: While we have favorites listed at the top, we *also* want those games to show up in their normal spot.
-                // So, yes, we will have duplicates in our list, and this is intentional.
-                foreach (Game game in tempListOfGames.OrderBy(y => y.Description))
+            }
+
+            foreach (Game game in tempListOfGames)
+            {
+                if (userData.TryGetValue(game.Name, out UserGameStats stats))
                 {
-                    _games.Add(game);
+                    game.PlayCount = stats.PlayCount;
+                    game.IsFavorite = stats.IsFavorite;
                 }
+            }
+
+            //Ensure favorites show up at the top of the list
+            foreach (Game game in tempListOfGames.Where(y => y.IsFavorite == true).OrderBy(y => y.Description))
+            {
+                _games.Add(game);
+            }
+            //Note: While we have favorites listed at the top, we *also* want those games to show up in their normal spot.
+            // So, yes, we will have duplicates in our list, and this is intentional.
+            foreach (Game game in tempListOfGames.OrderBy(y => y.Description))
+            {
+                _games.Add(game);
             }
             if (_games.Count == 0)
             {
@@ -349,10 +385,12 @@ namespace MAMEIronXP
             }
         }
         
-        private void PersistGamesFile()
+        /// <summary>
+        /// Our "ObservableCollection<Game> _games" will contain duplicates for any favorited game.
+        /// We need to ensure we only persist each game once, so that's what this helper does.
+        /// </summary>
+        private List<Game> DistinctGames()
         {
-            //Our "ObservableCollection<Game> _games" will contain duplicates for any favorited game.
-            //We need to ensure we only persist each game once, so that's what this chunk of code does.
             List<Game> games = new List<Game>();
             foreach (Game game in _games)
             {
@@ -361,10 +399,40 @@ namespace MAMEIronXP
                     games.Add(game);
                 }
             }
+            return games;
+        }
 
+        /// <summary>
+        /// Writes games.json, MAMEIronXP's catalog of games. Only called when generating the catalog from scratch (see PrepareForLaunch) -
+        /// this file is safe to delete/regenerate any time (e.g. after a MAME update) since it holds no user data.
+        /// </summary>
+        private void PersistCatalogFile()
+        {
             using (StreamWriter sw = new StreamWriter(_gamesJson, false))
             {
-                string json = JsonConvert.SerializeObject(games);
+                string json = JsonConvert.SerializeObject(DistinctGames());
+                sw.WriteLine(json);
+                sw.Close();
+            }
+        }
+
+        /// <summary>
+        /// Writes user-data.json, which holds the PlayCount/IsFavorite state that shouldn't be lost when games.json is regenerated.
+        /// </summary>
+        private void PersistUserDataFile()
+        {
+            var userData = new Dictionary<string, UserGameStats>();
+            foreach (Game game in DistinctGames())
+            {
+                if (game.IsFavorite || game.PlayCount > 0)
+                {
+                    userData[game.Name] = new UserGameStats { PlayCount = game.PlayCount, IsFavorite = game.IsFavorite };
+                }
+            }
+
+            using (StreamWriter sw = new StreamWriter(_userDataJson, false))
+            {
+                string json = JsonConvert.SerializeObject(userData);
                 sw.WriteLine(json);
                 sw.Close();
             }
@@ -382,7 +450,7 @@ namespace MAMEIronXP
             if (process.ExitCode == 0)
             {
                 game.IncrementPlayCount();
-                PersistGamesFile();
+                PersistUserDataFile();
                 //Update the metadata textbox with the updated playcount
                 DisplayMetadata(game);
             }
@@ -398,7 +466,7 @@ namespace MAMEIronXP
             _games.First(x => x.Name == ((Game)GamesListBox.SelectedItem).Name).ToggleFavorite();
 
             //PlaySound("pacman_cherry.wav");
-            PersistGamesFile();
+            PersistUserDataFile();
             RefreshGamesListBox();
         }
         /// <summary>
