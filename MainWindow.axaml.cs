@@ -38,8 +38,6 @@ namespace MAMEIronXP
         private Logger _logger;
         private DateTime _startTimeUpPress = new DateTime(0);
         private DateTime _startTimeDownPress = new DateTime(0);
-        private DateTime _startTimeCPress;
-        private DateTime _startTimeVPress;
         private const int LONGPRESSMILLISECONDS = 3000;
         private int JUMPDISTANCE = 10;
 
