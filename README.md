@@ -24,7 +24,9 @@ We assume you already have MAME downloaded and installed/compiled. If not, head 
 https://github.com/MrChrisWeinert/MAMEIronXP/releases
 2) Unzip it into a directory (e.g. `~/Applications/MAMEIronXP`).
 3) Add execute permissions: `chmod +x MAMEIronXP`
-4) Remove the quarantine flag macOS adds to downloaded files, or Gatekeeper will refuse to run it: `xattr -d com.apple.quarantine MAMEIronXP`
+4) Remove the quarantine flag macOS adds to downloaded files, or Gatekeeper will refuse to run it:
+`xattr -d com.apple.quarantine MAMEIronXP`
+`xattr -d com.apple.quarantine libAvaloniaNative.dylib`
 5) Run it from Terminal: `./MAMEIronXP`
 
 # Pre-built Binaries via GitHub Actions
@@ -75,6 +77,12 @@ The workflow lives at `.github/workflows/release-binaries.yml`.
 
 # Known Issues
 Wayland support is experimental as of Avalonia 12.1 (previously required disabling Wayland on the Pi). If you hit issues, disabling Wayland and falling back to X11 is still an option.
+
+## Video renderer (`-video`)
+The default `MAME:Args` in `appsettings.json` includes `-video bgfx`. BGFX is the one MAME renderer that works well across all three of our release targets (Windows, Raspberry Pi 5/Linux, macOS), which is why it's the default here. A few alternatives depending on your setup:
+- **Windows**: `-video d3d` is MAME's native Windows default — slightly lower overhead than bgfx, but no shader-chain (CRT/scanline) support.
+- **Raspberry Pi 5 / Wayland**: `-video opengl` is usually a safer, lighter choice than bgfx, since the Pi's GPU has less headroom for bgfx's shader-chain machinery.
+- If `-video` is omitted entirely, Linux/macOS fall back to MAME's `soft` (software) renderer, which is noticeably slower.
 
 # Prerequisites
 ## Download/install MAME
