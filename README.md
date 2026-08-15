@@ -24,7 +24,8 @@ We assume you already have MAME downloaded and installed/compiled. If not, head 
 https://github.com/MrChrisWeinert/MAMEIronXP/releases
 2) Unzip it into a directory (e.g. `~/Applications/MAMEIronXP`).
 3) Add execute permissions: `chmod +x MAMEIronXP`
-4) Run it from Terminal: `./MAMEIronXP`
+4) Remove the quarantine flag macOS adds to downloaded files, or Gatekeeper will refuse to run it: `xattr -d com.apple.quarantine MAMEIronXP`
+5) Run it from Terminal: `./MAMEIronXP`
 
 # Pre-built Binaries via GitHub Actions
 This repository includes an automated release workflow that builds these targets:
