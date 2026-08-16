@@ -179,6 +179,7 @@ namespace MAMEIronXP
                             gameCategory== "Misc." || 
                             gameCategory=="Tabletop" || 
                             gameCategory== "Board Game" || 
+                            gameCategory== "Gambling" || 
                             gameCategory=="Calculator")
                         {
                             continue;
