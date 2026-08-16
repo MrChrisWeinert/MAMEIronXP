@@ -27,6 +27,7 @@ https://github.com/MrChrisWeinert/MAMEIronXP/releases
 4) Remove the quarantine flag macOS adds to downloaded files, or Gatekeeper will refuse to run it:
 `xattr -d com.apple.quarantine MAMEIronXP`
 `xattr -d com.apple.quarantine libAvaloniaNative.dylib`
+`xattr -d com.apple.quarantine libHarfBuzzSharp.dylib`
 5) Run it from Terminal: `./MAMEIronXP`
 
 # Pre-built Binaries via GitHub Actions

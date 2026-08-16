@@ -20,6 +20,9 @@ jobs:
           - name: win-x64
             rid: win-x64
             binary: MAMEIronXP.exe
+          - name: linux-x64
+            rid: linux-x64
+            binary: MAMEIronXP
           - name: linux-arm64
             rid: linux-arm64
             binary: MAMEIronXP
