@@ -39,5 +39,12 @@ namespace MAMEIronXP.Models
         {
             PlayCount++;
         }
+
+        // PlayCount/IsFavorite live in user-data.json now, not games.json (see UserGameStats).
+        // These ShouldSerialize* methods are a Newtonsoft.Json naming convention that suppresses
+        // them on write while still allowing them to be read back for the legacy migration path
+        // in MainWindow.LoadGamesFromJSON.
+        public bool ShouldSerializePlayCount() => false;
+        public bool ShouldSerializeIsFavorite() => false;
     }
 }
