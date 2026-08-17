@@ -54,6 +54,7 @@ namespace MAMEIronXP
                     }                    
                     break;
                 case Key.Escape:
+                case Key.V:
                     this.Hide();
                     break;
             }
