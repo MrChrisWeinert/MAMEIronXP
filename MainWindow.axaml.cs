@@ -227,9 +227,6 @@ namespace MAMEIronXP
                     }                        
                     break;
                 case Key.Escape:
-                    ExitWindow exitWindow = new ExitWindow();
-                    exitWindow.Show();
-                    break;
                 case Key.V:
                     ExitWindow exitWindow = new ExitWindow();
                     exitWindow.Show();
