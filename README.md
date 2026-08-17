@@ -51,12 +51,12 @@ The workflow lives at `.github/workflows/release-binaries.yml`.
 
 # MAMEIronXP Controls
 ## Keyboard
-"C" on the keyboard will mark a game as a Favorite and a little Pac-Man icon will show up to the left of a game. The game will show up at the top of the Games list so it's easily accessible. The game will still show up in the list in alphabetic order. Pressing C again will unfavorite a game.
+"5" on the keyboard will mark a game as a Favorite and a little Pac-Man icon will show up to the left of a game. The game will show up at the top of the Games list so it's easily accessible. The game will still show up in the list in alphabetic order. Pressing 5 again will unfavorite a game.
 [_TODO_](https://github.com/MrChrisWeinert/MAMEIronXP/issues/12): make this into a long-press to prevent accidental favorite/unfavorites.
 
 "1" on the keyboard will make a selection (start a game, or make a selection on the Exit menu)
 
-"ESC" on the keyboard will bring up the Exit menu. Pressing it again will exit out of the Exit menu.
+"ESC" or "V" on the keyboard will bring up the Exit menu. Pressing it again will exit out of the Exit menu.
 
 "Up/Down" on the keyboard will scroll the games list.
 [_TODO_](https://github.com/MrChrisWeinert/MAMEIronXP/issues/13): Implement "acceleration" so you can navigate the list VERY fast when holding down the Up/Down button.
@@ -65,7 +65,7 @@ The workflow lives at `.github/workflows/release-binaries.yml`.
 ## X-Arcade Tankstick
 ![screenshot](https://github.com/MrChrisWeinert/MAMEIronXP/blob/main/Assets/X-Arcade-Tankstick.png?raw=true)
 
-"C" on the Tankstick will mark a game as a Favorite and a little Pac-Man icon will show up to the left of a game. The game will show up at the top of the Games list so it's easily accessible. The game will still show up in the list in alphabetic order. Pressing C again will unfavorite a game.
+"5" on the Tankstick will mark a game as a Favorite and a little Pac-Man icon will show up to the left of a game. The game will show up at the top of the Games list so it's easily accessible. The game will still show up in the list in alphabetic order. Pressing 5 again will unfavorite a game.
 [_TODO_](https://github.com/MrChrisWeinert/MAMEIronXP/issues/12): make this into a long-press to prevent accidental favorite/unfavorites.
 
 "1" on the Tankstick will make a selection (start a game, or make a selection on the Exit menu)

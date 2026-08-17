@@ -214,7 +214,7 @@ namespace MAMEIronXP
         {
             switch (e.Key)
             {
-                case Key.C:
+                case Key.D5:
                     e.Handled = true;
                     ToggleFavorite();
                     break;
@@ -227,6 +227,10 @@ namespace MAMEIronXP
                     }                        
                     break;
                 case Key.Escape:
+                    ExitWindow exitWindow = new ExitWindow();
+                    exitWindow.Show();
+                    break;
+                case Key.V:
                     ExitWindow exitWindow = new ExitWindow();
                     exitWindow.Show();
                     break;
