@@ -32,15 +32,6 @@ https://github.com/MrChrisWeinert/MAMEIronXP/releases
 `xattr -d com.apple.quarantine libHarfBuzzSharp.dylib`
 5) Run it from Terminal: `./MAMEIronXP`
 
-# Pre-built Binaries via GitHub Actions
-This repository includes an automated release workflow that builds these targets:
-- `win-x64`
-- `linux-x64`
-- `linux-arm64` (Raspberry Pi 5 when using a 64-bit OS)
-- `osx-arm64` (Apple Silicon)
-
-The workflow lives at `.github/workflows/release-binaries.yml`.
-
 # MAMEIronXP Controls
 ## Keyboard
 "5" on the keyboard will mark a game as a Favorite and a little Pac-Man icon will show up to the left of a game. The game will show up at the top of the Games list so it's easily accessible. The game will still show up in the list in alphabetic order. Pressing 5 again will unfavorite a game.
@@ -69,7 +60,9 @@ The workflow lives at `.github/workflows/release-binaries.yml`.
 
 
 # Known Issues
-Wayland support is experimental as of Avalonia 12.1 (previously required disabling Wayland on the Pi). If you hit issues, disabling Wayland and falling back to X11 is still an option.
+Wayland support is experimental as of Avalonia 12.1 (previously required disabling Wayland on the Pi). If you hit issues, disabling Wayland and falling back to X11 is still an option. A workaround that I'm using currently on the Pi 5 (Raspberry Pi OS Trixie) is to start MAMEIronXP like this:
+
+ `WAYLAND_DISPLAY= /home/me/MAME/MAMEIronXP/MAMEIronXP`
 
 ## Video renderer (`-video`)
 The default `MAME:Args` in `appsettings.json` includes `-video bgfx`. BGFX is the one MAME renderer that works well across all three of our release targets (Windows, Raspberry Pi 5/Linux, macOS), which is why it's the default here. A few alternatives depending on your setup:
@@ -87,6 +80,7 @@ https://github.com/mamedev/mame/releases/download/mame0258/mame0258b_64bit.exe
 
 
 ### Linux
+0) Optional for arm64: download a pre-compiled binary from https://stickfreaks.com/mame/ otherwise...carry on with step 1.
 1) Download the MAME source code and extract it to a directory of your choice (e.g. ~/MAME). You'll want to use a version of MAME that matches the version of your roms. I'm using version .258
 https://github.com/mamedev/mame/archive/refs/tags/mame0258.zip
 2) Compile MAME. Follow the directions here: https://docs.mamedev.org/initialsetup/compilingmame.html 
@@ -103,8 +97,8 @@ In short, change to your ~/MAME directory and run the following commands:
 MAMEIronXP was designed to run as a dedicated arcade machine in kiosk mode. The goal is to abstract the "computer" away from the end-user. Therefore, no keyboard/mouse should be required.
 That introduces a few complexities, so this is what I do to work around them:
 1) Auto-login
-    - On Raspbian, this can be configured during installation.
-    - On Ubuntu, open up your User settings and flip the slider to auto-login. (Note that changing these settings requires you to "Unlock" and that button will not work in an XRDP session)
+    - On Raspberry Pi OS, this can be configured during installation.
+    - On Ubuntu, open up your User settings and flip the slider to auto-login.
 
     ![screenshot](https://github.com/MrChrisWeinert/MAMEIronXP/blob/main/Assets/Ubuntu_AutoLogin.png?raw=true)
     - On Windows, Download the [Microsoft Autologon tool](https://learn.microsoft.com/en-us/sysinternals/downloads/autologon) and enter your username/password
@@ -112,14 +106,19 @@ That introduces a few complexities, so this is what I do to work around them:
     ![screenshot](https://github.com/MrChrisWeinert/MAMEIronXP/blob/main/Assets/Windows_AutoLogin.png?raw=true)
     
 2) Auto-start
-    - On Raspbian
+    - On Raspberry Pi OS (non-Wayland)
       - Edit ```/etc/xdg/lxsession/LXDE-pi/autostart``` and add the following line ```@lxterminal -e bash /home/me/startup.sh```
-      - Then create a startup.sh bash script in your home directory with the following 
+      - Then create a startup.sh bash script in your home directory with the following:
         ```bash
         #!/bin/bash
         /home/me/MAMEIronXP/MAMEIronXP
         ```
-
+    - On Raspberry Pi OS (Wayland)
+      - Edit ```/etc/xdg/labwc/autostart``` and add the following line ```lxterminal -e bash /home/me/startup.sh &```
+      - Then create a startup.sh bash script in your home directory with the following, noting ```#!/bin/sh``` isn't required since labwc just sources the contents:
+        ```bash
+        WAYLAND_DISPLAY= /home/me/MAMEIronXP/MAMEIronXP
+        ``` 
     - On Ubuntu, open up 'Startup Applcations' and add MAMEIronXP.
   
     ![screenshot](https://github.com/MrChrisWeinert/MAMEIronXP/blob/main/Assets/Ubuntu_AutoStart.png?raw=true)
@@ -128,7 +127,7 @@ That introduces a few complexities, so this is what I do to work around them:
 
     ![screenshot](https://github.com/MrChrisWeinert/MAMEIronXP/blob/main/Assets/Windows_AutoStart.png?raw=true)
 3) Shutdown
-    - On Raspbian, set the s-bit to enable non-superusers to run shutdown as root: ```sudo chmod a+s /sbin/shutdown```
+    - On Raspberry Pi OS, set the s-bit to enable non-superusers to run shutdown as root: ```sudo chmod a+s /sbin/shutdown```
     - On Ubuntu, set the s-bit to enable non-superusers to run shutdown as root: ```sudo chmod a+s /sbin/shutdown```
     - On Windows nothing special is needed. For locked-down Windows machines (i.e. Server) you'll need to open gpedit.msc and grant access
     
