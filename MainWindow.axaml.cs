@@ -6,7 +6,6 @@ using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
-using Microsoft.Extensions.Configuration;
 using MAMEIronXP.Models;
 using Newtonsoft.Json;
 using System;
@@ -29,6 +28,7 @@ namespace MAMEIronXP
         private string _gamesJson;
         private string _userDataJson;
         private string _logFile;
+        private GameFilterSettings _gameFilterSettings;
         private Dictionary<string, Bitmap> _snapshots = new Dictionary<string, Bitmap>();
 
 
@@ -44,24 +44,15 @@ namespace MAMEIronXP
 
         public MainWindow()
         {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
-                .Build();
-
-            _MAMEDirectory = ResolvePath(GetSetting(configuration, "MAME:Directory", "."), AppContext.BaseDirectory);
-            _mameExe = ResolvePath(
-                GetSetting(configuration, "MAME:Executable", OperatingSystem.IsWindows() ? "mame.exe" : "mame"),
-                _MAMEDirectory);
-            _mameArgs = GetSetting(configuration, "MAME:Args", "-autosave -skip_gameinfo -video bgfx");
-            _logFile = ResolvePath(
-                GetSetting(configuration, "MAME:LogFile", "MAMElogfile.log"),
-                _MAMEDirectory);
-            _snapDirectory = ResolvePath(
-                GetSetting(configuration, "MAME:SnapDirectory", "snap"),
-                _MAMEDirectory);
-            _gamesJson = Path.Combine(_MAMEDirectory, "games.json");
-            _userDataJson = Path.Combine(_MAMEDirectory, "user-data.json");
+            AppConfig config = AppConfig.Load();
+            _MAMEDirectory = config.MAMEDirectory;
+            _mameExe = config.MameExe;
+            _mameArgs = config.MameArgs;
+            _logFile = config.LogFile;
+            _snapDirectory = config.SnapDirectory;
+            _gamesJson = config.GamesJson;
+            _userDataJson = config.UserDataJson;
+            _gameFilterSettings = config.GameFilter;
             _logger = new Logger(_logFile);
 
             InitializeComponent();
@@ -276,7 +267,7 @@ namespace MAMEIronXP
                 //INFO: games.json is MAMEIronXP's catalog of games, generated fresh from MAME's own game list whenever it doesn't exist.
                 //      It's safe to delete (e.g. after updating MAME to pull in new/changed games) because it holds no user data.
                 //      A game's PlayCount and IsFavorite status live separately in user-data.json (see LoadGamesFromJSON/PersistUserDataFile) so they survive a games.json regeneration.
-                GameListInitializer gameListInitializer = new GameListInitializer(_MAMEDirectory, _mameExe, _snapDirectory);
+                GameListInitializer gameListInitializer = new GameListInitializer(_MAMEDirectory, _mameExe, _snapDirectory, _gameFilterSettings);
                 foreach (Game game in gameListInitializer.GenerateGameList().OrderBy(x => x.Description))
                 {
                     _games.Add(game);
@@ -494,17 +485,6 @@ namespace MAMEIronXP
             //Restore the SelectedItem back to whatever was selected before we refreshed the list.
             GamesListBox.SelectedItem = selectedGame;
             GamesListBox.Focus();
-        }
-
-        private static string GetSetting(IConfiguration configuration, string key, string fallback)
-        {
-            string? value = configuration[key];
-            return string.IsNullOrWhiteSpace(value) ? fallback : value.Trim();
-        }
-
-        private static string ResolvePath(string path, string basePath)
-        {
-            return Path.IsPathRooted(path) ? Path.GetFullPath(path) : Path.GetFullPath(Path.Combine(basePath, path));
         }
     }
 }

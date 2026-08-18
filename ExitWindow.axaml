@@ -13,13 +13,16 @@
         HorizontalAlignment="Center"
         VerticalAlignment="Center"
         Loaded="ExitWindow_Loaded">
-  <ListBox x:Name="ExitListBox" Width="425" Height="175" Focusable="True" CornerRadius="5" Opacity="100" FontFamily="{StaticResource ArcadeFont}" Background="#F2F2F2" Foreground="Black">
-    <ListBox.ItemTemplate>
-      <DataTemplate x:DataType="x:String">
-        <StackPanel Orientation="Vertical">
-          <TextBlock Text="{Binding}" FontSize="36" />
-        </StackPanel>
-      </DataTemplate>
-    </ListBox.ItemTemplate>
-  </ListBox>
+  <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+    <ListBox x:Name="ExitListBox" Width="425" Height="225" Focusable="True" CornerRadius="5" Opacity="100" FontFamily="{StaticResource ArcadeFont}" Background="#F2F2F2" Foreground="Black">
+      <ListBox.ItemTemplate>
+        <DataTemplate x:DataType="x:String">
+          <StackPanel Orientation="Vertical">
+            <TextBlock Text="{Binding}" FontSize="36" />
+          </StackPanel>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+    <TextBlock x:Name="StatusText" IsVisible="False" Width="425" TextWrapping="Wrap" TextAlignment="Center" FontFamily="{StaticResource ArcadeFont}" FontSize="20" Foreground="White" />
+  </StackPanel>
 </Window>

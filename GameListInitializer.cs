@@ -16,14 +16,16 @@ namespace MAMEIronXP
         private string _mameExe;
         private string _listFull;
         private string _snapsDir;
+        private GameFilterSettings _filterSettings;
         private List<Game> _games = new List<Game>();
         private Dictionary<string, string> _categories = new Dictionary<string, string>();
         private List<string> _killList = new List<string>();
-        public GameListInitializer(string MAMEDirectory, string mameExe, string snapDir)
+        public GameListInitializer(string MAMEDirectory, string mameExe, string snapDir, GameFilterSettings filterSettings)
         {
             _MAMEDirectory = MAMEDirectory;
             _mameExe = mameExe;
             _snapsDir = snapDir;
+            _filterSettings = filterSettings;
             _listFull = Path.Combine(_MAMEDirectory, "list.xml");
         }
         public List<Game> GenerateGameList()
@@ -152,35 +154,8 @@ namespace MAMEIronXP
                             continue;
                         }
 
-                        //TODO: Make this a configurable parameter via appsettings.json?
-                        //Filter out games by category/subcategory.
-                        //I'm sure there's an easier/better way of handling this.
-                        if (gameCategory == "Electromechanical" || 
-                            gameCategory.Contains("* Mature *") ||
-                            gameSubCategory.Contains("* Mature *") ||
-                            gameSubCategory == "Reels" || 
-                            gameCategory == "Casino" || 
-                            gameSubCategory == "Mahjong" || 
-                            (gameCategory == "Rhythm" && (gameSubCategory == "Dance" || gameSubCategory == "Instruments")) || 
-                            gameCategory == "Home Systems" || 
-                            gameCategory == "Professional Systems" || 
-                            gameCategory == "System" || 
-                            gameCategory == "Ball & Paddle" ||
-                            gameDescription.Contains("DECO Cassette") || 
-                            gameCategory == "Multiplay" ||
-                            gameDescription.Contains("PlayChoice-10") || 
-                            gameCategory == "Quiz" ||
-                            gameDescription.Contains("bootleg") || 
-                            gameCategory == "Utilities" || 
-                            gameCategory == "Handheld" || 
-                            gameCategory== "Computer" || 
-                            gameCategory== "Game Console" || 
-                            gameCategory== "Slot Machine" || 
-                            gameCategory== "Misc." || 
-                            gameCategory=="Tabletop" || 
-                            gameCategory== "Board Game" || 
-                            gameCategory== "Gambling" || 
-                            gameCategory=="Calculator")
+                        //Filter out games by category/subcategory, per the "GameFilter" section of appsettings.json.
+                        if (IsFilteredByCategory(gameCategory, gameSubCategory, gameDescription))
                         {
                             continue;
                         }
@@ -196,6 +171,35 @@ namespace MAMEIronXP
                     }
                 }
             }
+        }
+
+        private bool IsFilteredByCategory(string gameCategory, string gameSubCategory, string gameDescription)
+        {
+            if (_filterSettings.ExcludedCategories.Contains(gameCategory))
+            {
+                return true;
+            }
+            if (_filterSettings.ExcludedSubCategories.Contains(gameSubCategory))
+            {
+                return true;
+            }
+            if (_filterSettings.ExcludedCategoryContains.Any(x => gameCategory.Contains(x)))
+            {
+                return true;
+            }
+            if (_filterSettings.ExcludedSubCategoryContains.Any(x => gameSubCategory.Contains(x)))
+            {
+                return true;
+            }
+            if (_filterSettings.ExcludedDescriptionContains.Any(x => gameDescription.Contains(x)))
+            {
+                return true;
+            }
+            if (_filterSettings.ExcludedCategorySubCategoryPairs.Any(p => p.Category == gameCategory && p.SubCategories.Contains(gameSubCategory)))
+            {
+                return true;
+            }
+            return false;
         }
 
         private bool isValidScreenshot(string screenshot)
