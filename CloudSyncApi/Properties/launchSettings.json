@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "CloudSyncApi": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7121",
+      "launchBrowser": false
+    }
+  }
+}

@@ -448,3 +448,13 @@ $RECYCLE.BIN/
 ## Visual Studio Code
 ##
 .vscode/
+
+##
+## Claude Code
+##
+.claude/
+
+##
+## Azure Functions
+##
+local.settings.json
