@@ -37,6 +37,7 @@ namespace MAMEIronXP
         //   If a user Favorites/Unfavorites a game, refresh the list, etc.
         private ObservableCollection<Game> _games = new ObservableCollection<Game>();
         private Logger _logger;
+        private CloudSyncService _cloudSyncService;
         private DateTime _startTimeUpPress = new DateTime(0);
         private DateTime _startTimeDownPress = new DateTime(0);
         private const int LONGPRESSMILLISECONDS = 3000;
@@ -54,6 +55,9 @@ namespace MAMEIronXP
             _userDataJson = config.UserDataJson;
             _gameFilterSettings = config.GameFilter;
             _logger = new Logger(_logFile);
+            _cloudSyncService = new CloudSyncService(
+                Path.Combine(AppContext.BaseDirectory, "appsettings.json"),
+                _logger);
 
             InitializeComponent();
             PrepareForLaunch();
@@ -86,7 +90,7 @@ namespace MAMEIronXP
             if (x.IsMiddleButtonPressed)
             {
                 e.Handled = true;
-                ExitWindow exitWindow = new ExitWindow();
+                ExitWindow exitWindow = new ExitWindow(_cloudSyncService);
                 exitWindow.Show();
             }
         }
@@ -219,7 +223,7 @@ namespace MAMEIronXP
                     break;
                 case Key.Escape:
                 case Key.V:
-                    ExitWindow exitWindow = new ExitWindow();
+                    ExitWindow exitWindow = new ExitWindow(_cloudSyncService);
                     exitWindow.Show();
                     break;
             }
@@ -428,6 +432,8 @@ namespace MAMEIronXP
                 sw.WriteLine(json);
                 sw.Close();
             }
+
+            _ = _cloudSyncService.PersistUserDataAsync(_userDataJson);
         }
         private void StartGame(Game game)
         {

@@ -1,5 +1,5 @@
 using Avalonia.Controls;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -11,16 +11,31 @@ namespace MAMEIronXP
 {
     public partial class ExitWindow : Window
     {
-        private bool _isRegeneratingCatalog = false;
+        private const int CloudSyncMenuIndex = 4;
 
-        public ExitWindow()
+        private bool _isRegeneratingCatalog = false;
+        private readonly CloudSyncService _cloudSyncService;
+        private readonly ObservableCollection<string> _menuItems;
+
+        public ExitWindow(CloudSyncService cloudSyncService)
         {
             InitializeComponent();
-            ExitListBox.ItemsSource = new List<string>(["Exit to operating system", "Reboot system", "Shutdown system", "Regenerate games.json"]);
+            _cloudSyncService = cloudSyncService;
+            _menuItems = new ObservableCollection<string>
+            {
+                "Exit to operating system",
+                "Reboot system",
+                "Shutdown system",
+                "Regenerate games.json",
+                CloudSyncMenuLabel(_cloudSyncService.IsEnabled)
+            };
+            ExitListBox.ItemsSource = _menuItems;
             ExitListBox.SelectedIndex = 0;
             ExitListBox.KeyDown += ExitListBox_KeyDown;
             this.PointerPressed += ExitWindow_PointerPressed;
         }
+
+        private static string CloudSyncMenuLabel(bool enabled) => enabled ? "CloudSync: enabled" : "CloudSync: disabled";
 
         private void ExitListBox_KeyDown(object? sender, KeyEventArgs e)
         {
@@ -62,6 +77,13 @@ namespace MAMEIronXP
                             break;
                         case 3:
                             RegenerateGamesCatalog();
+                            break;
+                        case CloudSyncMenuIndex:
+                            bool newEnabled = !_cloudSyncService.IsEnabled;
+                            _cloudSyncService.SetEnabled(newEnabled);
+                            _menuItems[CloudSyncMenuIndex] = CloudSyncMenuLabel(newEnabled);
+                            ExitListBox.SelectedIndex = CloudSyncMenuIndex;
+                            ExitListBox.Focus();
                             break;
                     }
                     break;
